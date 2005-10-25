@@ -1,7 +1,7 @@
 GameGuts - A Unified Toolkit for Game Engine Development
-Version @BUILD@ (@DATE@)
+Version 0.1.4 (2005-10-25)
 
- Copyright (c) 1999-@YEAR@ by Jason Perkins
+ Copyright (c) 1999-2005 by Jason Perkins
  All Rights Reserved
 
 
