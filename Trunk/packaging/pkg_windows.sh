@@ -43,7 +43,7 @@ echo ""
 echo "RETRIEVING SOURCE CODE FROM REPOSITORY..."
 echo ""
 cd ../..
-svn co https://starkos.gotdns.org/Svn/Sim8/GameGuts/Tags/$1 GameGuts-$1
+svn co https://svn.berlios.de/svnroot/repos/gut/Tags/$1 GameGuts-$1
 
 echo ""
 echo "UPDATING VERSION STRINGS..."
