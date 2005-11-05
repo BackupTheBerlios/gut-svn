@@ -20,8 +20,9 @@ end
 
 dopackage("code/lib")
 
+local builtin = docommand
 function docommand(cmd, ...)
-	%docommand(cmd, arg)
+	builtin(cmd, unpack(arg))
 	if (cmd == "clean") then
 		rmdir("bin/debug")
 		rmdir("bin/release")
