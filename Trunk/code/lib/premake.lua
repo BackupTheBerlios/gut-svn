@@ -19,7 +19,9 @@ package.language = "c++"
 	
 	package.config["Release"].buildflags =
 	{
-		"no-frame-pointer"
+		"no-frame-pointer",
+		"no-symbols",
+		"optimize-speed",
 	}
 
 	
@@ -55,12 +57,10 @@ package.language = "c++"
 -- Libraries
 
 		if (windows) then
-		  print("In windows block")
 		  table.insert(package.links, { "user32", "gdi32", "opengl32", "glu32", "dinput8", "dxguid", "winmm" })
 		end
 		
 		if (linux) then
-		   print("In linux block")
 			table.insert(package.libpaths, findlib("X11"))
 			table.insert(package.links, { "X11", "GL", "GLU" })
 		end
