@@ -3,29 +3,48 @@
 
 project.name = "GameGuts"
 
-project.config["Debug"].bindir = "bin/debug"
-project.config["Debug"].libdir = "bin/debug"
+-- Project options
 
-project.config["Release"].bindir = "bin/release"
-project.config["Release"].libdir = "bin/release"
+	addoption("no-platform", "Exclude the platform abstraction API from the build")
+	addoption("with-tests",  "Include the test suite applications")
 
-addoption("no-platform", "Exclude the platform abstraction API from the build")
-addoption("with-tests",  "Include the test suite applications")
 
-if (options["with-tests"]) then
-	dopackage("tests/input")
-	dopackage("tests/memory")
-	dopackage("tests/window")
-end
+-- Set config specific output directories
 
-dopackage("code/lib")
+	project.config["Debug"].bindir = "bin/debug"
+	project.config["Debug"].libdir = "bin/debug"
 
-oldcommand = docommand
-function docommand(cmd, arg)
-	oldcommand(cmd, arg)
-	if (cmd == "clean") then
+	project.config["Release"].bindir = "bin/release"
+	project.config["Release"].libdir = "bin/release"
+
+
+-- Packages
+
+	if (options["with-tests"]) then
+		dopackage("tests/input")
+		dopackage("tests/memory")
+		dopackage("tests/window")
+	end
+
+	dopackage("code/lib")
+
+
+-- Clean up some additional files; extra code here to make it work on
+-- both Premake v2.x and Premake v3.x, will phase out later
+
+	oldcommand = docommand
+	function docommand(cmd, arg)
+		if (cmd == "clean") then
+			doclean(cmd, arg)
+		else
+			oldcommand(cmd, arg)
+		end
+	end
+
+	function doclean(cmd, arg)
+		oldcommand(cmd, arg)
 		rmdir("bin/debug")
 		rmdir("bin/release")
 		rmdir("bin")
 	end
-end
+	

@@ -25,7 +25,6 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
-
 /* I configure the DirectInput devices to store events into a per-device
  * queue. This is the size of the queue per device. */
 static const int MY_BUFFER_SIZE = 32;
@@ -133,6 +132,8 @@ int utx_msw_ShutdownInput()
 
 static void myAcquireDevice(IDirectInputDevice8* device);
 static void mySendKeyboardEvent(MyDeviceDesc* desc, DWORD currentTime);
+static void mySendMouseEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data);
+static void mySendCtrlEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data);
 
 int utx_msw_PollInputDevices()
 {
@@ -204,8 +205,14 @@ int utx_msw_PollInputDevices()
 				case UT_DEVICE_KEYBOARD:
 					mySendKeyboardEvent(nextDeviceToSend, currentTime);
 					break;
+				case UT_DEVICE_MOUSE:
+					mySendMouseEvent(nextDeviceToSend, nextDeviceToSend->buffer[nextDeviceToSend->nextEvent++]);
+					break;
+				case UT_DEVICE_CONTROLLER:
+					mySendCtrlEvent(nextDeviceToSend, nextDeviceToSend->buffer[nextDeviceToSend->nextEvent++]);
+					break;
 				default:
-					nextDeviceToSend->nextEvent++;  /* temporary, until I port handlers */
+					nextDeviceToSend->nextEvent++;
 					break;
 				}
 			}
@@ -296,43 +303,42 @@ void mySendKeyboardEvent(MyDeviceDesc* desc, DWORD currentTime)
  * event and send it up to the host.
  ****************************************************************************/
 
-#if NOT_READY_YET
-void mySendMouseEvent(const MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
+void mySendMouseEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
 {
-	int what, index, value;
+	utEvent event;
+	event.when   = data.dwTimeStamp;
+	event.window = utGetActiveWindow();
+	event.arg0   = desc->index;
+
 	switch (data.dwOfs)
 	{
 	case DIMOFS_BUTTON0:
 	case DIMOFS_BUTTON1:
 	case DIMOFS_BUTTON2:
 	case DIMOFS_BUTTON3:
-		what = UT_EVENT_MOUSE_BUTTON;
-		index = data.dwOfs - DIMOFS_BUTTON0;
-		value = (data.dwData & 0x80) ? 1 : 0;
+		event.what = UT_EVENT_MOUSE_BUTTON;
+		event.arg1 = data.dwOfs - DIMOFS_BUTTON0;
+		event.arg2 = (data.dwData & 0x80) ? MAX_INPUT : 0;
 		break;
 	case DIMOFS_X:
-		what = UT_EVENT_MOUSE_AXIS;
-		index = 0;
-		value = data.dwData;
+		event.what = UT_EVENT_MOUSE_AXIS;
+		event.arg1 = 0;
+		event.arg2 = data.dwData;
 		break;
 	case DIMOFS_Y:
-		what = UT_EVENT_MOUSE_AXIS;
-		index = 1;
-		value = data.dwData;
+		event.what = UT_EVENT_MOUSE_AXIS;
+		event.arg1 = 1;
+		event.arg2 = data.dwData;
 		break;
 	case DIMOFS_Z:
-		what = UT_EVENT_MOUSE_AXIS;
-		index = 2;
-		value = data.dwData;
+		event.what = UT_EVENT_MOUSE_AXIS;
+		event.arg1 = 2;
+		event.arg2 = data.dwData;
 		break;
 	}
 
-	int mouse = desc->index;
-	DWORD when = data.dwTimeStamp;
-
-	utxSendInputEvent(what, window, when, mouse, index, value);
+	utxSendInputEvent(&event);
 }
-#endif
 
 
 /****************************************************************************
@@ -340,10 +346,13 @@ void mySendMouseEvent(const MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
  * event and send it up to the host.
  ****************************************************************************/
 
-#if NOT_READY_YET
-void mySendControllerEvent(utWindow window, const MyDeviceDesc* device, const DIDEVICEOBJECTDATA& data)
+void mySendCtrlEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
 {
-	int what, index, value;
+	utEvent event;
+	event.when   = data.dwTimeStamp;
+	event.window = utGetActiveWindow();
+	event.arg0   = desc->index;
+
 	switch (data.dwOfs)
 	{
 	case DIJOFS_X:
@@ -354,23 +363,19 @@ void mySendControllerEvent(utWindow window, const MyDeviceDesc* device, const DI
 	case DIJOFS_RZ:
 	case DIJOFS_SLIDER(0):
 	case DIJOFS_SLIDER(1):
-		what  = UT_EVENT_CTRL_AXIS;
-		index = (data.dwOfs - DIJOFS_X) / sizeof(LONG);
-		value = data.dwData;
+		event.what = UT_EVENT_CTRL_AXIS;
+		event.arg1 = (data.dwOfs - DIJOFS_X) / sizeof(LONG);
+		event.arg2 = data.dwData;
 		break;
 	default:
-		what = UT_EVENT_CTRL_BUTTON;
-		index = (data.dwOfs - DIJOFS_BUTTON(0)) / sizeof(BYTE);
-		value = (data.dwData & 0x80) ? 1 : 0;
+		event.what = UT_EVENT_CTRL_BUTTON;
+		event.arg1 = (data.dwOfs - DIJOFS_BUTTON(0)) / sizeof(BYTE);
+		event.arg2 = (data.dwData & 0x80) ? MAX_INPUT : 0;
 		break;
 	}
 
-	int controller = device->state->index;
-	DWORD when = data.dwTimeStamp;
-	
-	utxSendInputEvent(what, window, when, controller, index, value);
+	utxSendInputEvent(&event);
 }
-#endif
 
 
 /****************************************************************************

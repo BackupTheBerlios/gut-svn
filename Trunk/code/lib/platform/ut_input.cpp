@@ -26,9 +26,11 @@ struct MyInputDevice
 };
 
 /* Lists of all input devices connected to the system */
-static utxArray<MyInputDevice*> my_keyboards;
-static utxArray<MyInputDevice*> my_mice;
-static utxArray<MyInputDevice*> my_controllers;
+typedef utxArray<MyInputDevice*> utxDeviceArray;
+
+static utxDeviceArray my_keyboards;
+static utxDeviceArray my_mice;
+static utxDeviceArray my_controllers;
 
 
 /****************************************************************************
@@ -120,7 +122,7 @@ int utxReleaseAllInputDevices()
 
 static utWindow my_window = NULL;
 
-static void myReleaseButtons(utxArray<MyInputDevice*>& devices, utEvent* event)
+static void myReleaseButtons(utxDeviceArray& devices, utEvent* event)
 {
 	for (int ixDev = 0; ixDev < devices.size(); ++ixDev)
 	{
@@ -154,6 +156,12 @@ int utxInputFocusChanged(utWindow window)
 		event.what = UT_EVENT_KEY;
 		myReleaseButtons(my_keyboards, &event);
 
+		event.what = UT_EVENT_MOUSE_BUTTON;
+		myReleaseButtons(my_mice, &event);
+
+		event.what = UT_EVENT_CTRL_BUTTON;
+		myReleaseButtons(my_controllers, &event);
+
 		/* Let the platform layer clean up as well */
 		utxResetInputPlatform();
 	}
@@ -175,11 +183,21 @@ int utxSendInputEvent(utEvent* event)
 	{
 	case UT_EVENT_KEY:
 		state = &(my_keyboards[event->arg0]->buttons[event->arg1]);
-		if (*state == event->arg2)
-			return 1;
-		*state = event->arg2;
 		break;
+	case UT_EVENT_MOUSE_BUTTON:
+		state = &(my_mice[event->arg0]->buttons[event->arg1]);
+		break;
+	case UT_EVENT_CTRL_BUTTON:
+		state = &(my_controllers[event->arg0]->buttons[event->arg1]);
+		break;
+	default:
+		return utSendEvent(event);
 	}
 
+	/* Only send the event if the state has changed */
+	if (*state == event->arg2)
+		return 1;
+
+	*state = event->arg2;
 	return utSendEvent(event);
 }

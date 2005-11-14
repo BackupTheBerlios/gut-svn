@@ -39,6 +39,26 @@ void UT_CALLBACK onEvent(utEvent* event)
 		utLog(buffer);
 		break;
 
+	case UT_EVENT_MOUSE_AXIS:
+		sprintf(buffer, "Mouse(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
+		utLog(buffer);
+		break;
+
+	case UT_EVENT_MOUSE_BUTTON:
+		sprintf(buffer, "Mouse(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
+		utLog(buffer);
+		break;
+
+	case UT_EVENT_CTRL_AXIS:
+		sprintf(buffer, "Controller(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
+		utLog(buffer);
+		break;
+
+	case UT_EVENT_CTRL_BUTTON:
+		sprintf(buffer, "Controller(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
+		utLog(buffer);
+		break;
+
 	case UT_EVENT_WINDOW_CLOSE:
 		utDestroyWindow(event->window);
 		break;
