@@ -17,6 +17,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if defined(_WIN32)
+#include <windows.h>
+#endif
+
+#define NO_KEYBOARD_MESSAGES   0
+#define NO_MOUSE_MESSAGES      0
+#define NO_CTRL_MESSAGES       0
 
 void UT_CALLBACK onEvent(utEvent* event)
 {
@@ -24,6 +31,7 @@ void UT_CALLBACK onEvent(utEvent* event)
 
 	switch (event->what)
 	{
+#if !NO_KEYBOARD_MESSAGES
 	case UT_EVENT_KEY:
 		sprintf(buffer, "Keyboard(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
@@ -38,7 +46,8 @@ void UT_CALLBACK onEvent(utEvent* event)
 		sprintf(buffer, "Char: %c\n", event->arg1);
 		utLog(buffer);
 		break;
-
+#endif
+#if !NO_MOUSE_MESSAGES
 	case UT_EVENT_MOUSE_AXIS:
 		sprintf(buffer, "Mouse(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
 		utLog(buffer);
@@ -48,7 +57,8 @@ void UT_CALLBACK onEvent(utEvent* event)
 		sprintf(buffer, "Mouse(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
 		break;
-
+#endif
+#if !NO_CTRL_MESSAGES
 	case UT_EVENT_CTRL_AXIS:
 		sprintf(buffer, "Controller(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
 		utLog(buffer);
@@ -58,7 +68,7 @@ void UT_CALLBACK onEvent(utEvent* event)
 		sprintf(buffer, "Controller(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
 		break;
-
+#endif
 	case UT_EVENT_WINDOW_CLOSE:
 		utDestroyWindow(event->window);
 		break;
@@ -69,6 +79,9 @@ void UT_CALLBACK onEvent(utEvent* event)
 void UT_CALLBACK onLogMessage(const char* message)
 {
 	printf(message);
+#if defined(_WIN32)
+	OutputDebugString(message);
+#endif
 }
 
 
@@ -84,16 +97,12 @@ int main()
 	utSetLogHandler(onLogMessage);
 	utInitialize();
 
-	utWindow wnd1 = utCreateWindow("Toolkit Input Sample", 640, 480);
-	if (wnd1 == NULL)
+	utWindow wnd = utCreateWindow("Toolkit Input Sample", 640, 480);
+	if (wnd == NULL)
 		die("Failed to create window 1");
 
-	utWindow wnd2 = utCreateWindow("Toolkit Input Sample", 640, 480);
-	if (wnd2 == NULL)
-		die("Failed to create window 2");
-
 	utSetEventHandler(onEvent);
-	while (utPollEvents(true))
+	while (utPollEvents(false))
 	{
 		/* Update the scene... */
 	}

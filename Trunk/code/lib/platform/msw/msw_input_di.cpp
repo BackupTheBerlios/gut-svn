@@ -20,8 +20,7 @@
 
 /* I'm using DX8 because that was the current version when I last overhauled
  * this code. Do I really need this version, or could I get all of the same
- * functionality in, say, DX5? I'd like to keep the system requirements as
- * low as possible */
+ * functionality in, say, DX5? (And does it matter?) */
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
@@ -69,6 +68,7 @@ int utx_msw_InitializeInput()
 {
 	HRESULT hr;
 
+	/* Connect to DirectInput */
 	hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&my_di, NULL);
 	if (FAILED(hr))
 	{
@@ -76,6 +76,7 @@ int utx_msw_InitializeInput()
 		return false;
 	}
 
+	/* Enumerate all attached devices */
 	hr = my_di->EnumDevices(0, utx_msw_EnumDevicesCallback, NULL, DIEDFL_ATTACHEDONLY);
 	if (FAILED(hr))
 	{
@@ -156,7 +157,7 @@ int utx_msw_PollInputDevices()
 		/* Copy the data out of the device */
 		desc->nextEvent = 0;
 		desc->numEvents = MY_BUFFER_SIZE;
-		hr = device->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), desc->buffer, &desc->numEvents, NULL);
+		hr = device->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), desc->buffer, &(desc->numEvents), NULL);
 		if (FAILED(hr))
 		{
 			utx_msw_ReportError("IDirectInputDevice8::GetDeviceData", hr);
@@ -274,6 +275,11 @@ void mySendKeyboardEvent(MyDeviceDesc* desc, DWORD currentTime)
 		event.arg2 = MAX_INPUT;
 
 		desc->keyRepeatTime += my_repeatDelay;
+	}
+	else
+	{
+		/* Why am I here? */
+		return;
 	}
 
 	utxSendInputEvent(&event);
@@ -420,7 +426,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	case DI8DEVTYPE_DRIVING:
 	case DI8DEVTYPE_GAMEPAD:
 	case DI8DEVTYPE_JOYSTICK:
-		hr = idevice->SetDataFormat((LPCDIDATAFORMAT)&c_dfDIJoystick);
+		hr = idevice->SetDataFormat((LPCDIDATAFORMAT)&c_dfDIJoystick2);
 		kind = UT_DEVICE_CONTROLLER;
 		index = utNumControllers();
 		break;
@@ -438,18 +444,6 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 		return DIENUM_CONTINUE;
 	}
 
-	/* Retreive the number of whatsits and doodads on the device */
-	DIDEVCAPS devCaps;
-	ZeroMemory(&devCaps, sizeof(DIDEVCAPS));
-	devCaps.dwSize = sizeof(DIDEVCAPS);
-	hr = idevice->GetCapabilities(&devCaps);
-	if (FAILED(hr)) 
-	{
-		idevice->Release();
-		utx_msw_ReportError("IDirectInputDevice8::GetCapabilities", hr);
-		return DIENUM_CONTINUE;
-	}
-
 	/* Allocate a buffer to hold device events */
 	DIPROPDWORD buffer;
 	buffer.diph.dwSize       = sizeof(DIPROPDWORD);
@@ -462,6 +456,18 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	{
 		idevice->Release();
 		utx_msw_ReportError("IDirectInputDevice8::SetProperty", hr);
+		return DIENUM_CONTINUE;
+	}
+
+	/* Retreive the number of whatsits and doodads on the device */
+	DIDEVCAPS devCaps;
+	ZeroMemory(&devCaps, sizeof(DIDEVCAPS));
+	devCaps.dwSize = sizeof(DIDEVCAPS);
+	hr = idevice->GetCapabilities(&devCaps);
+	if (FAILED(hr)) 
+	{
+		idevice->Release();
+		utx_msw_ReportError("IDirectInputDevice8::GetCapabilities", hr);
 		return DIENUM_CONTINUE;
 	}
 
