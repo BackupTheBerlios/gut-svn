@@ -24,7 +24,13 @@ package.language = "c++"
 		"optimize-speed",
 	}
 
+	-- For Cygwin DirectX
+	if (windows and options["target"] == "gnu") then
+		tinsert(package.includepaths, "/usr/include/directx")
+	end
 	
+
+
 -- Defined Symbols
 	
 	package.defines =

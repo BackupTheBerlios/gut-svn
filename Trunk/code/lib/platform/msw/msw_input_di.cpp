@@ -27,7 +27,7 @@
 /* I configure the DirectInput devices to store events into a per-device
  * queue. This is the size of the queue per device. */
 static const int MY_BUFFER_SIZE = 32;
-static const int BAD_INDEX = -1;
+static const DWORD BAD_INDEX = 0xffffffff;
 
 /* I keep one of these for each attached input device */
 struct MyDeviceDesc
@@ -157,7 +157,7 @@ int utx_msw_PollInputDevices()
 		/* Copy the data out of the device */
 		desc->nextEvent = 0;
 		desc->numEvents = MY_BUFFER_SIZE;
-		hr = device->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), desc->buffer, &(desc->numEvents), NULL);
+		hr = device->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), desc->buffer, &(desc->numEvents), 0);
 		if (FAILED(hr))
 		{
 			utx_msw_ReportError("IDirectInputDevice8::GetDeviceData", hr);
@@ -316,31 +316,37 @@ void mySendMouseEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
 	event.window = utGetActiveWindow();
 	event.arg0   = desc->index;
 
-	switch (data.dwOfs)
+	/* GCC doesn't consider DIMOFS_... values constants, so can't use switch */
+	if (data.dwOfs == DIMOFS_BUTTON0 ||
+	    data.dwOfs == DIMOFS_BUTTON1 ||
+		 data.dwOfs == DIMOFS_BUTTON2 ||
+		 data.dwOfs == DIMOFS_BUTTON3)
 	{
-	case DIMOFS_BUTTON0:
-	case DIMOFS_BUTTON1:
-	case DIMOFS_BUTTON2:
-	case DIMOFS_BUTTON3:
 		event.what = UT_EVENT_MOUSE_BUTTON;
 		event.arg1 = data.dwOfs - DIMOFS_BUTTON0;
 		event.arg2 = (data.dwData & 0x80) ? MAX_INPUT : 0;
-		break;
-	case DIMOFS_X:
+	}
+	else if (data.dwOfs == DIMOFS_X)
+	{
 		event.what = UT_EVENT_MOUSE_AXIS;
 		event.arg1 = 0;
 		event.arg2 = data.dwData;
-		break;
-	case DIMOFS_Y:
+	}
+	else if (data.dwOfs == DIMOFS_Y)
+	{
 		event.what = UT_EVENT_MOUSE_AXIS;
 		event.arg1 = 1;
 		event.arg2 = data.dwData;
-		break;
-	case DIMOFS_Z:
+	}
+	else if (data.dwOfs == DIMOFS_Z)
+	{
 		event.what = UT_EVENT_MOUSE_AXIS;
 		event.arg1 = 2;
 		event.arg2 = data.dwData;
-		break;
+	}
+	else
+	{
+		return;
 	}
 
 	utxSendInputEvent(&event);
@@ -359,25 +365,25 @@ void mySendCtrlEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
 	event.window = utGetActiveWindow();
 	event.arg0   = desc->index;
 
-	switch (data.dwOfs)
+	/* GCC doesn't consider DIMOFS_... values constants, so can't use switch */
+	if (data.dwOfs == DIJOFS_X ||
+		 data.dwOfs == DIJOFS_Y ||
+		 data.dwOfs == DIJOFS_Z ||
+		 data.dwOfs == DIJOFS_RX ||
+		 data.dwOfs == DIJOFS_RY ||
+		 data.dwOfs == DIJOFS_RZ ||
+		 data.dwOfs == DIJOFS_SLIDER(0) ||
+		 data.dwOfs == DIJOFS_SLIDER(1))
 	{
-	case DIJOFS_X:
-	case DIJOFS_Y:
-	case DIJOFS_Z:
-	case DIJOFS_RX:
-	case DIJOFS_RY:
-	case DIJOFS_RZ:
-	case DIJOFS_SLIDER(0):
-	case DIJOFS_SLIDER(1):
 		event.what = UT_EVENT_CTRL_AXIS;
 		event.arg1 = (data.dwOfs - DIJOFS_X) / sizeof(LONG);
 		event.arg2 = data.dwData;
-		break;
-	default:
+	}
+	else
+	{
 		event.what = UT_EVENT_CTRL_BUTTON;
 		event.arg1 = (data.dwOfs - DIJOFS_BUTTON(0)) / sizeof(BYTE);
 		event.arg2 = (data.dwData & 0x80) ? MAX_INPUT : 0;
-		break;
 	}
 
 	utxSendInputEvent(&event);
