@@ -142,25 +142,32 @@ static void myReleaseButtons(utxDeviceArray& devices, utEvent* event)
 	}
 }
 
+int utxReleaseAllButtons()
+{
+	utEvent event;
+	event.window = my_window;
+	event.when   = utGetTimer();
+	event.arg2   = 0;
+
+	/* Release any buttons that are marked as down, since I won't be
+	 * notified if the user releases them while in the other app */
+	event.what = UT_EVENT_KEY;
+	myReleaseButtons(my_keyboards, &event);
+
+	event.what = UT_EVENT_MOUSE_BUTTON;
+	myReleaseButtons(my_mice, &event);
+
+	event.what = UT_EVENT_CTRL_BUTTON;
+	myReleaseButtons(my_controllers, &event);
+		
+	return 1;
+}
+
 int utxInputFocusChanged(utWindow window)
 {
 	if (window == NULL)
 	{
-		utEvent event;
-		event.window = my_window;
-		event.when   = utGetTimer();
-		event.arg2   = 0;
-
-		/* Release any buttons that are marked as down, since I won't be
-		 * notified if the user releases them while in the other app */
-		event.what = UT_EVENT_KEY;
-		myReleaseButtons(my_keyboards, &event);
-
-		event.what = UT_EVENT_MOUSE_BUTTON;
-		myReleaseButtons(my_mice, &event);
-
-		event.what = UT_EVENT_CTRL_BUTTON;
-		myReleaseButtons(my_controllers, &event);
+		utxReleaseAllButtons();
 
 		/* Let the platform layer clean up as well */
 		utxResetInputPlatform();

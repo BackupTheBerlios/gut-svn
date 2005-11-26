@@ -30,9 +30,11 @@ int utxInitializePlatform()
 	/* Setup "window closed" notifications */
 	utx_wmDeleteAtom = XInternAtom(utx_display, "WM_DELETE_WINDOW", False);
 
-	/* I just assume that a keyboard is attached */
+	/* I just assume that a keyboard and mouse are attached */
 	utLog("Found keyboard\n");
 	utxRegisterInputDevice(UT_DEVICE_KEYBOARD, 255);
+	utLog("Found mouse\n");
+	utxRegisterInputDevice(UT_DEVICE_MOUSE, 3);
 
 	return true;
 }

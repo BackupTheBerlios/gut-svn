@@ -24,6 +24,11 @@ static void mySendCharEvent(XEvent* xevent, utEvent* event);
 
 extern int utx_x11_keymap[];
 
+/* This is hacky. The API requires me to send position deltas for the mouse,
+ * but X11 passes in absolute window coordinates. So I use these to convert
+ * coordinate systems between updates */
+static int my_mouseX = -1;
+static int my_mouseY = -1; 
 
 
 /****************************************************************************
@@ -96,7 +101,7 @@ int utxPollEvents(int block)
 
 		case KeyPress:
 			event.what = UT_EVENT_KEY;
-			event.when = ((XKeyEvent*)(&xevent))->time;
+			event.when = xevent.xkey.time;
 			event.arg0 = 0;
 			event.arg1 = myTranslateKeycode(&xevent);
 			event.arg2 = MAX_INPUT;
@@ -107,7 +112,7 @@ int utxPollEvents(int block)
 		case KeyRelease:
 			/* X autorepeat works by sending additional key release/press
 			 * pairs, to make it look like the key is getting tapped. */
-			event.when = ((XKeyEvent*)(&xevent))->time;
+			event.when = xevent.xkey.time;
 			event.arg0 = 0;
 			event.arg1 = myTranslateKeycode(&xevent);
 			if (myKeyRepeating(&xevent))
@@ -123,6 +128,48 @@ int utxPollEvents(int block)
 				event.arg2 = 0;
 				utxSendInputEvent(&event);
 			}
+			break;
+			
+		case MappingNotify:
+			utxReleaseAllButtons();
+			XRefreshKeyboardMapping((XMappingEvent*)(&xevent));
+			break;
+			
+		case ButtonPress:
+		case ButtonRelease:
+			event.what = UT_EVENT_MOUSE_BUTTON;
+			event.when = xevent.xbutton.time;
+			event.arg0 = 0;
+			/* Make button indices match Win32 */
+			event.arg1 = xevent.xbutton.button - 1;
+			if (event.arg1 == 2)
+				event.arg1 = 1;
+			else if (event.arg1 == 1)
+				event.arg1 = 2;
+			event.arg2 = (xevent.type == ButtonPress) ? MAX_INPUT : 0;
+			utxSendInputEvent(&event);
+			break;
+			
+		case MotionNotify:
+			if (my_mouseX < 0) my_mouseX = xevent.xmotion.x;
+			if (my_mouseY < 0) my_mouseY = xevent.xmotion.y;
+			event.what = UT_EVENT_MOUSE_AXIS;
+			event.when = xevent.xmotion.time;
+			event.arg0 = 0;
+			if (xevent.xmotion.x != my_mouseX)
+			{
+				event.arg1 = 0;
+				event.arg2 = xevent.xmotion.x - my_mouseX;
+				utxSendInputEvent(&event);
+			}
+			if (xevent.xmotion.y != my_mouseY)
+			{
+				event.arg1 = 1;
+				event.arg2 = xevent.xmotion.y - my_mouseY;
+				utxSendInputEvent(&event);
+			}
+			my_mouseX = xevent.xmotion.x;
+			my_mouseY = xevent.xmotion.y;
 			break;
 		}
 	} while (XPending(utx_display));

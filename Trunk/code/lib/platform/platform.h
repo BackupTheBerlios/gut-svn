@@ -49,5 +49,6 @@ int      utxSendWindowEvent(utEvent* event);
 int      utxRegisterInputDevice(int type, int numBtns);
 int      utxReleaseAllInputDevices();
 int      utxInputFocusChanged(utWindow window);
+int      utxReleaseAllButtons();
 int      utxResetInputPlatform();
 int      utxSendInputEvent(utEvent* event);
