@@ -88,7 +88,11 @@ namespace Sim8.GameGuts
 			UT_EVENT_WINDOW_FOCUS,
 			UT_EVENT_KEY,
 			UT_EVENT_KEY_REPEAT,
-			UT_EVENT_CHAR
+			UT_EVENT_CHAR,
+			UT_EVENT_MOUSE_AXIS,
+			UT_EVENT_MOUSE_BUTTON,
+			UT_EVENT_CTRL_AXIS,
+			UT_EVENT_CTRL_BUTTON
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
