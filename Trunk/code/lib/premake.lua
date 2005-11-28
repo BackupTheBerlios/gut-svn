@@ -63,7 +63,7 @@ package.language = "c++"
 -- Libraries
 
 		if (windows) then
-		  tinsert(package.links, { "user32", "gdi32", "opengl32", "glu32", "dinput8", "dxguid", "winmm" })
+		  tinsert(package.links, { "user32", "gdi32", "opengl32", "glu32", "dinput", "dxguid", "winmm" })
 		end
 		
 		if (linux) then

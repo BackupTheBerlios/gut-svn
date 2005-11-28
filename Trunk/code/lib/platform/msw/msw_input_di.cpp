@@ -21,7 +21,8 @@
 /* I'm using DX8 because that was the current version when I last overhauled
  * this code. Do I really need this version, or could I get all of the same
  * functionality in, say, DX5? (And does it matter?) */
-#define DIRECTINPUT_VERSION 0x0800
+// #define DIRECTINPUT_VERSION 0x0800
+#define DIRECTINPUT_VERSION 0x0500
 #include <dinput.h>
 
 /* I configure the DirectInput devices to store events into a per-device
@@ -34,7 +35,8 @@ struct MyDeviceDesc
 {
 	int kind;
 	int index;
-	IDirectInputDevice8* device;
+//	IDirectInputDevice8* device;
+	IDirectInputDevice2* device;
 	DIDEVICEOBJECTDATA buffer[MY_BUFFER_SIZE];
 	DWORD numEvents;
 	DWORD nextEvent;
@@ -61,7 +63,8 @@ static HKL my_keyboardLayout;
  * system in ut_input.cpp.
  ****************************************************************************/
 
-static IDirectInput8* my_di = NULL;
+// static IDirectInput8* my_di = NULL;
+static IDirectInput* my_di = NULL;
 static utxArray<MyDeviceDesc*> my_devices;
 
 int utx_msw_InitializeInput()
@@ -69,7 +72,8 @@ int utx_msw_InitializeInput()
 	HRESULT hr;
 
 	/* Connect to DirectInput */
-	hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&my_di, NULL);
+//	hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&my_di, NULL);
+	hr = DirectInputCreate(GetModuleHandle(NULL), DIRECTINPUT_VERSION, &my_di, NULL);
 	if (FAILED(hr))
 	{
 		utx_msw_ReportError("DirectInput8Create", hr);
@@ -131,7 +135,8 @@ int utx_msw_ShutdownInput()
  * the events all get shipped off in chronological order.
  ****************************************************************************/
 
-static void myAcquireDevice(IDirectInputDevice8* device);
+// static void myAcquireDevice(IDirectInputDevice8* device);
+static void myAcquireDevice(IDirectInputDevice2* device);
 static void mySendKeyboardEvent(MyDeviceDesc* desc, DWORD currentTime);
 static void mySendMouseEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data);
 static void mySendCtrlEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data);
@@ -144,7 +149,8 @@ int utx_msw_PollInputDevices()
 	for (int ixDevice = 0; ixDevice < my_devices.size(); ++ixDevice)
 	{
 		MyDeviceDesc* desc = my_devices[ixDevice];
-		IDirectInputDevice8* device = desc->device;
+//		IDirectInputDevice8* device = desc->device;
+		IDirectInputDevice2* device = desc->device;
 
 		/* Poll the device. If this fails, reacquire and try again next time */
 		HRESULT hr = device->Poll();
@@ -405,11 +411,13 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	utLog(msg);
 
 	/* Open a connection to the device */
-	IDirectInputDevice8* idevice;
-	HRESULT hr = my_di->CreateDevice(deviceInfo->guidInstance, &idevice, NULL);
+//	IDirectInputDevice8* idevice;
+	IDirectInputDevice2* idevice;
+//	HRESULT hr = my_di->CreateDevice(deviceInfo->guidInstance, &idevice, NULL);
+	HRESULT hr = my_di->CreateDevice(deviceInfo->guidInstance, (IDirectInputDevice**)&idevice, NULL);
 	if (FAILED(hr)) 
 	{
-		utx_msw_ReportError("IDirectInput8::CreateDevice", hr);
+		utx_msw_ReportError("IDirectInput::CreateDevice", hr);
 		return DIENUM_CONTINUE;
 	}
 
@@ -417,21 +425,24 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	int kind, index;
 	switch (deviceInfo->dwDevType & 0xff)
 	{
-	case DI8DEVTYPE_KEYBOARD:
+//	case DI8DEVTYPE_KEYBOARD:
+	case DIDEVTYPE_KEYBOARD:
 		hr = idevice->SetDataFormat((LPCDIDATAFORMAT)&c_dfDIKeyboard);
 		kind = UT_DEVICE_KEYBOARD;
 		index = utNumKeyboards();
 		break;
 
-	case DI8DEVTYPE_MOUSE:
+//	case DI8DEVTYPE_MOUSE:
+	case DIDEVTYPE_MOUSE:
 		hr = idevice->SetDataFormat((LPCDIDATAFORMAT)&c_dfDIMouse);
 		kind = UT_DEVICE_MOUSE;
 		index = utNumMice();
 		break;
 
-	case DI8DEVTYPE_DRIVING:
-	case DI8DEVTYPE_GAMEPAD:
-	case DI8DEVTYPE_JOYSTICK:
+//	case DI8DEVTYPE_DRIVING:
+//	case DI8DEVTYPE_GAMEPAD:
+//	case DI8DEVTYPE_JOYSTICK:
+	case DIDEVTYPE_JOYSTICK:
 		hr = idevice->SetDataFormat((LPCDIDATAFORMAT)&c_dfDIJoystick2);
 		kind = UT_DEVICE_CONTROLLER;
 		index = utNumControllers();
@@ -498,14 +509,16 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
  * a device. Tries to reacquire the device for the next pass.
  ****************************************************************************/
 
-void myAcquireDevice(IDirectInputDevice8* device)
+//void myAcquireDevice(IDirectInputDevice8* device)
+void myAcquireDevice(IDirectInputDevice2* device)
 {
 	HRESULT hr;
 
 	device->Unacquire();
 
 	HWND hwnd = (HWND)utGetWindowHandle(utGetActiveWindow());
-	hr = device->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NOWINKEY | DISCL_NONEXCLUSIVE);
+//	hr = device->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NOWINKEY | DISCL_NONEXCLUSIVE);
+	hr = device->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (SUCCEEDED(hr))
 	{
 		hr = device->Acquire();
