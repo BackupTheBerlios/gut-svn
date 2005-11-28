@@ -26,7 +26,7 @@ project.name = "GameGuts"
 		dopackage("tests/window")
 	end
 
-	dopackage("code/lib")
+	dopackage("code/toolkit")
 
 
 -- Clean up some additional files; extra code here to make it work on

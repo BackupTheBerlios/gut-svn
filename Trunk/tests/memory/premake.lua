@@ -10,8 +10,8 @@ package.buildflags =
 
 package.includepaths =
 {
-	"../../code/include",
-	"../../code/lib"
+	"../../include",
+	"../../code/toolkit"
 }
 
 package.config["Debug"].libpaths = 

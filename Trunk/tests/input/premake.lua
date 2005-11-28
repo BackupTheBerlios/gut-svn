@@ -10,7 +10,7 @@ package.buildflags =
 
 package.includepaths =
 {
-	"../../code/include"
+	"../../include"
 }
 
 package.config["Debug"].libpaths = 

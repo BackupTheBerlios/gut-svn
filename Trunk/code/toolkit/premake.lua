@@ -7,7 +7,7 @@ package.language = "c++"
 
 	package.includepaths =
 	{
-		"../include",
+		"../../include",
 		"."
 	}
 	
