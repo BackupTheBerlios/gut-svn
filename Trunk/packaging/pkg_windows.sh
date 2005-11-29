@@ -57,10 +57,10 @@ year_str=`date +%Y`
 sed -e "s/@BUILD@/$build_str/" -e "s/@DATE@/$date_str/" -e "s/@YEAR@/$year_str/" README.txt > README.tmp
 mv README.tmp README.txt
 
-cd code/include/gut
+cd include/gut
 sed -e "s/@BUILD@/$build_str/" -e "s/@DATE@/$date_str/" -e "s/@YEAR@/$year_str/" gut.h > gut.tmp
 mv gut.tmp gut.h
-cd ../../..
+cd ../..
 
 echo ""
 echo "UPDATING TAG WITH NEW VERSON NUMBERS..."
