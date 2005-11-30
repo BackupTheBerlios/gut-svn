@@ -30,7 +30,8 @@ int utPollEvents(int block)
 	if (utNumWindows() == 0)
 		return false;
 
-	return utxPollEvents(block);
+	int result = utxPollEvents(block);
+	return result;
 }
 
 

@@ -494,6 +494,8 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	desc->kind   = kind;
 	desc->index  = index;
 	desc->keyRepeatEvent = BAD_INDEX;
+	desc->nextEvent = 0;
+	desc->numEvents = 0;
 	my_devices.push_back(desc);
 
 	/* Register this device with the input system */
