@@ -1,3 +1,20 @@
+* Referenced counted classes using base new/delete calls,
+  need to map to custom allocators
+  
+* I think the "write info about the input device to the log" 
+  really ought to be in ut_input.cpp, not the platform layers.
+  Requires a generic API to query device information
+
+* Add a window minimized or hidden event
+
+* I don't like utFindWindowByHandle(), or rather I don't like
+  the implementation of using a base class for it.
+
+
+-----------------------------------------------------------------
+ Input System Notes
+-----------------------------------------------------------------
+ 
 Should support both action maps and character codes. Should be
 able to poll current states and also receive notification events.
 How are actions mapped (a device ID I think, which can be 
@@ -24,57 +41,3 @@ int utGetAxisState(int deviceId, int axisId);
 int utGetHatState(int deviceId, int hatId);
 
 int utEnableKeyboardRepeat(int ixKeyboard, int fEnable);
-
-
-
-Version 0.1.5
------------------------------------------------------------------
-
-  
-* I think the "write info about the input device to the log" 
-  really ought to be in ut_input.cpp, not the platform layers.
-  Requires a generic API to query device information
-
-* Add a window minimized or hidden event
-
-* I don't like utFindWindowByHandle(), or rather I don't like
-  the implementation of using a base class for it.
-
-* Mouse input
-
-event.what = MOUSE_BUTTON
-event.arg0 = device id
-event.arg1 = button id
-event.arg2 = button state
-
-event.what = MOUSE_AXIS
-event.arg0 = device id
-event.arg1 = axis id
-event.arg2 = axis delta
-
-
-Version 0.1.6
------------------------------------------------------------------
-
-* Controller input (basic)
-
-event.what = CTRL_BUTTON
-event.arg0 = device id
-event.arg1 = button id
-event.arg2 = button state
-
-event.what = CTRL_AXIS
-event.arg0 = device id
-event.arg1 = axis id
-event.arg2 = axis delta
-
-
-
-Future Releases
------------------------------------------------------------------
-
-* Multiple monitors? At least a way to query the monitors and
-  maybe their placement?
-  
-* Get *.txt added as solution items (premake)
-

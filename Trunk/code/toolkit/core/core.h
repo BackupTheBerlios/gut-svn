@@ -15,6 +15,7 @@
 
 #include <gut/gut.h>
 #include "array.h"
+#include "referenced.h"
 
 /* Internal interface to the memory subsystem */
 int utxInitializeMemory();

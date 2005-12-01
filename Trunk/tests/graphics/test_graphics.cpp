@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - test_window.cpp
+ * GameGut - test_graphics.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -16,38 +16,23 @@
 #include <gut/gut.h>
 #include <stdio.h>
 #include <stdlib.h>
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 
-static utWindow wnd1 = NULL;
-static utWindow wnd2 = NULL;
-
+static bool keepRunning;
 
 void UT_CALLBACK onEvent(utEvent* event)
 {
-	char message[1024];
-
-	int which = (event->window == wnd1) ? 1 : 2;
-
 	switch (event->what)
 	{
-	case UT_EVENT_WINDOW_FOCUS:
-		sprintf(message, "Window #%d focus is %d\n", which, event->arg0);
-		utLog(message);
+	case UT_EVENT_KEY:
+		if (event->arg1 == UT_KEY_ESCAPE && event->arg2 > 0)
+			keepRunning = false;
 		break;
 
 	case UT_EVENT_WINDOW_CLOSE:
-		sprintf(message, "Window #%d is closing\n", which);
-		utLog(message);
 		utDestroyWindow(event->window);
-		break;
-
-	case UT_EVENT_WINDOW_REDRAW:
-		sprintf(message, "Window #%d needs redraw\n", which);
-		utLog(message);
-		break;
-
-	case UT_EVENT_WINDOW_RESIZE:
-		sprintf(message, "Resize window #%d: %dx%d\n", which, event->arg0, event->arg1);
-		utLog(message);
 		break;
 	}
 }
@@ -56,6 +41,9 @@ void UT_CALLBACK onEvent(utEvent* event)
 void UT_CALLBACK onLogMessage(const char* message)
 {
 	printf(message);
+#if defined(_WIN32)
+	OutputDebugString(message);
+#endif
 }
 
 
@@ -68,23 +56,19 @@ void die(const char* msg)
 
 int main()
 {
-	/* Initialize the Toolkit */
 	utSetLogHandler(onLogMessage);
 	utInitialize();
 
-	/* Open a window */
-	wnd1 = utCreateWindow("Toolkit Test Window #1", 640, 480);
-	if (wnd1 == NULL)
-		die("Failed to create first window");
+	utWindow wnd = utCreateWindow("Toolkit Graphics Test", 640, 480);
+	if (wnd == NULL)
+		die("Failed to create window");
 
-	/* Open another window */
-	wnd2 = utCreateWindow("Toolkit Test Window #2", 512, 480);
-	if (wnd2 == NULL)
-		die("Failed to create second window");
+	void* hwnd = utGetWindowHandle(wnd);
+	utRenderTarget rt = utCreateWindowTarget(hwnd);
 
-	/* Run the event loop until both windows have closed */
 	utSetEventHandler(onEvent);
-	while (utPollEvents(true))
+	keepRunning = true;
+	while (utPollEvents(true) && keepRunning)
 	{
 		/* Update the scene... */
 	}

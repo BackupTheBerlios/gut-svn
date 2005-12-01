@@ -5,6 +5,7 @@ project.name = "GameGuts"
 
 -- Project options
 
+	addoption("no-graphics", "Exclude the graphics API from the build")
 	addoption("no-platform", "Exclude the platform abstraction API from the build")
 	addoption("with-tests",  "Include the test suite applications")
 
@@ -21,6 +22,7 @@ project.name = "GameGuts"
 -- Packages
 
 	if (options["with-tests"]) then
+		dopackage("tests/graphics")
 		dopackage("tests/input")
 		dopackage("tests/memory")
 		dopackage("tests/window")

@@ -52,6 +52,14 @@ package.language = "c++"
 		tinsert(package.defines, {"_WIN32", "WIN32"})
 	end
 	
+	if (options["no-platform"]) then
+		tinsert(package.defines, "NO_PLATFORM")
+	end
+	
+	if (options["no-graphics"]) then
+		tinsert(package.defines, "NO_GRAPHICS")
+	end
+	
 	
 -- Crazy linker options to allow DLL to live in same directory as executable
 	
@@ -63,12 +71,12 @@ package.language = "c++"
 -- Libraries
 
 		if (windows) then
-		  tinsert(package.links, { "user32", "gdi32", "opengl32", "glu32", "dinput", "dxguid", "winmm" })
+		  tinsert(package.links, { "user32", "gdi32", "dinput", "dxguid", "winmm" })
 		end
 		
 		if (linux) then
 			tinsert(package.libpaths, findlib("X11"))
-			tinsert(package.links, { "X11", "GL", "GLU" })
+			tinsert(package.links, { "X11" })
 		end
 
 
@@ -76,7 +84,7 @@ package.language = "c++"
 
 	package.files = 
 	{
-		matchfiles("../include/gut/*.h"),
+		matchfiles("../../include/gut/*.h"),
 		matchfiles("core/*.h", "core/*.cpp"),
 	}
 
@@ -89,4 +97,16 @@ package.language = "c++"
 			tinsert(package.files, matchfiles("platform/x11/*.h", "platform/x11/*.cpp"))
 		end
 	end
+	
+	if (not options["no-graphics"]) then
+		tinsert(package.files, matchfiles("graphics/*.h", "graphics/*.cpp"))
+		tinsert(package.files, matchfiles("graphics/gl/*.h", "graphics/gl/*.cpp"))
+		if (windows) then
+			tinsert(package.links, { "opengl32", "glu32" })
+		end
+		if (linux) then
+			tinsert(package.links, { "GL", "GLU" })
+		end
+	end
+	
 	
