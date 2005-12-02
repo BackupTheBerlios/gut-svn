@@ -122,6 +122,9 @@ namespace Sim8.GameGuts
 
 		[DllImport("GameGuts")] public static extern
 		bool utDestroyWindow(IntPtr window);
+
+		[DllImport("GameGuts")] public static extern
+		IntPtr utGetWindowHandle(IntPtr window);
 			
 		#endregion
 
@@ -129,6 +132,31 @@ namespace Sim8.GameGuts
 
 		[DllImport("GameGuts")] public static extern
 		int utGetTimer();
+
+		#endregion
+
+		#region Graphics Interface
+
+		[DllImport("GameGuts")] public static extern
+		bool utBeginFrame();
+	
+		[DllImport("GameGuts")] public static extern
+		bool utClear(float red, float green, float blue, float alpha);
+
+		[DllImport("GameGuts")] public static extern
+		IntPtr utCreateWindowTarget(IntPtr parentWindow);
+
+		[DllImport("GameGuts")] public static extern
+		bool utEndFrame();
+
+		[DllImport("GameGuts")] public static extern
+		bool utReleaseRenderTarget(IntPtr target);
+
+		[DllImport("GameGuts")] public static extern
+		bool utResizeRenderTarget(IntPtr target, int width, int height);
+		
+		[DllImport("GameGuts")] public static extern
+		bool utSwapAllRenderTargets();
 
 		#endregion
 	}
