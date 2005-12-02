@@ -28,6 +28,12 @@ inline void operator delete(void* ptr, const char* file, int line)
 	utFree(ptr, file, line);
 }
 
+inline void operator delete(void* ptr)
+{
+	utFREE(ptr);
+}
+
+
 #if defined(_DEBUG)
 	#define utNEW     new(__FILE__,__LINE__)
 	#define utDELETE  delete

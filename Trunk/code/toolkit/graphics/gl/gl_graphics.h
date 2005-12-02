@@ -27,6 +27,7 @@
 /* Base class for the platform specific rendering APIs */
 struct utxRenderTarget : Referenced
 {
+	virtual ~utxRenderTarget() { }
 	int width, height;
 };
 

@@ -33,6 +33,14 @@ utRenderTarget utCreateWindowTarget(void* window)
 }
 
 
+int utReleaseRenderTarget(utRenderTarget target)
+{
+	my_targets.remove(target);
+	target->release();
+	return true;
+}
+
+
 void utxReleaseAllRenderTargets()
 {
 	for (int i = 0; i < my_targets.size(); ++i)
