@@ -13,8 +13,7 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-int utxInitializeGraphics();
-int utxShutdownGraphics();
-
 /* Internal API */
+int  utxInitializeGraphics();
+int  utxShutdownGraphics();
 void utxReleaseAllRenderTargets();

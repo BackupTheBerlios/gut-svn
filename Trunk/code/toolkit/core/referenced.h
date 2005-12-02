@@ -30,7 +30,7 @@ struct Referenced
 	{ ++ref; }
 
 	void release()
-	{ if (--ref <= 0) delete this; }
+	{ if (--ref <= 0) utDELETE this; }
 
 	int ref;
 };

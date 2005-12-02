@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - msw_platform.h
+ * GameGut - core/msw/errors.h
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,13 +13,8 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "core/msw/errors.h"
-#include "platform/platform.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-/* Window management */
-LRESULT CALLBACK utx_msw_WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
-
-/* User input handling */
-int utx_msw_InitializeInput();
-int utx_msw_ShutdownInput();
-int utx_msw_PollInputDevices();
+int utxLogErrorFunc(const char* function, HRESULT code, const char* file, int line);
+#define utxLogError(func, code)  utxLogErrorFunc(func, code, __FILE__, __LINE__)

@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <gut/gut.h>
+#include "memops.h"
 #include "array.h"
 #include "referenced.h"
 

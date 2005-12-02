@@ -20,7 +20,9 @@
 #include <windows.h>
 #endif
 
+static utRenderTarget target;
 static bool keepRunning;
+
 
 void UT_CALLBACK onEvent(utEvent* event)
 {
@@ -33,6 +35,10 @@ void UT_CALLBACK onEvent(utEvent* event)
 
 	case UT_EVENT_WINDOW_CLOSE:
 		utDestroyWindow(event->window);
+		break;
+
+	case UT_EVENT_WINDOW_RESIZE:
+		utResizeRenderTarget(target, event->arg0, event->arg1);
 		break;
 	}
 }
@@ -54,6 +60,15 @@ void die(const char* msg)
 }
 
 
+void tick()
+{
+	utBeginFrame();
+	utClear(0.2f, 0.0f, 0.2f, 1.0f);
+	utEndFrame();
+	utSwapRenderTarget(target);
+}
+
+
 int main()
 {
 	utSetLogHandler(onLogMessage);
@@ -64,13 +79,13 @@ int main()
 		die("Failed to create window");
 
 	void* hwnd = utGetWindowHandle(wnd);
-	utRenderTarget rt = utCreateWindowTarget(hwnd);
+	target = utCreateWindowTarget(hwnd);
 
 	utSetEventHandler(onEvent);
 	keepRunning = true;
 	while (utPollEvents(true) && keepRunning)
 	{
-		/* Update the scene... */
+		tick();
 	}
 
 	utShutdown();

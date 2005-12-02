@@ -16,7 +16,7 @@
 #include <string.h>
 
 
-/****************************************************************************
+/***********************************************************************
  * A simple contiguous-memory array, used for keeping track of child
  * items within the toolkit. Intended for the storage of primitive 
  * data types, such as pointers and ints.
@@ -26,7 +26,7 @@
  * do in order to route everything through utAlloc() and utFree(). In
  * addition, the GCC STL does not release memory until the process
  * exits, so you can't reset your environment by calling utShutdown().
- ****************************************************************************/
+ **********************************************************************/
 
 class UT_DECLSPEC utxArrayBase
 {

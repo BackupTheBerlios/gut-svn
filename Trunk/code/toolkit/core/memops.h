@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - gl_graphics.cpp
+ * GameGut - memops.h
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,41 +13,26 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "core/core.h"
-#include "gl_graphics.h"
+/***********************************************************************
+ * A wrapper to connect the C++ memory operators to the toolkit 
+ * allocator functions.
+ **********************************************************************/
 
-
-int utxInitializeGraphics()
+inline void* operator new(size_t size, const char* file, int line)
 {
-	return true;
+	return utAlloc(size, file, line);
 }
 
-
-int utxShutdownGraphics()
+inline void operator delete(void* ptr, const char* file, int line)
 {
-	utxReleaseAllRenderTargets();
-	return true;
+	utFree(ptr, file, line);
 }
 
+#if defined(_DEBUG)
+	#define utNEW     new(__FILE__,__LINE__)
+	#define utDELETE  delete
+#else
+	#define utNEW  new
+	#define utDELETE
+#endif
 
-int utBeginFrame()
-{
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glCullFace(GL_BACK);
-	return true;
-}
-
-
-int utClear(float r, float g, float b, float a)
-{
-	glClearColor(r, g, b, a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	return true;
-}
-
-
-int utEndFrame()
-{
-	return true;
-}

@@ -14,24 +14,7 @@
  **********************************************************************/
 
 #include "core/core.h"
-#include "graphics/graphics.h"
-
-/* Temporary, I'll need to create a platform-dependent class */
-struct utxRenderTarget : Referenced
-{
-	int x;
-
-	utxRenderTarget()
-	{
-		x = 22;
-	}
-
-	~utxRenderTarget()
-	{
-		x = 0;
-	}
-};
-
+#include "gl_graphics.h"
 
 /* Keep track of all open targets so I can close them at exit */
 static utxArray<utRenderTarget> my_targets;
@@ -39,8 +22,11 @@ static utxArray<utRenderTarget> my_targets;
 
 utRenderTarget utCreateWindowTarget(void* window)
 {
-	utRenderTarget target = new utxRenderTarget();
-
+	utRenderTarget target = utxCreateWindowTarget(window);
+	if (target == NULL)
+		return NULL;
+	
+	/* Add it to the master list */
 	target->reference();
 	my_targets.push_back(target);
 	return target;
@@ -53,3 +39,17 @@ void utxReleaseAllRenderTargets()
 		my_targets[i]->release();
 	my_targets.clear();
 }
+
+
+int utSwapAllRenderTargets()
+{
+	int result = true;
+	for (int i = 0; i < my_targets.size(); ++i)
+	{
+		if (!utSwapRenderTarget(my_targets[i]))
+			result = false;
+	}
+	return result;
+}
+
+

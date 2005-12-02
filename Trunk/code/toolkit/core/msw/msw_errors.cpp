@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - msw_errors.cpp
+ * GameGut - core/msw/msw_errors.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,9 +13,9 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "core/core.h"
-#include "msw_platform.h"
 #include <stdio.h>
+#include "core/core.h"
+#include "errors.h"
 
 
 /****************************************************************************
@@ -24,19 +24,18 @@
  * message and prints it to the log.
  ****************************************************************************/
 
-int utx_msw_ReportErrorFunc(const char* function, HRESULT code, const char* file, int line)
+int utxLogErrorFunc(const char* function, HRESULT code, const char* file, int line)
 {
-	char buffer[1024];
-	sprintf(buffer, "%s(%d): call to %s() failed with error code %x: ", file, line, function, code);
+	char buffer[8192];
+	sprintf(buffer, "%s(%d): call to %s() failed with error code %x:\n", file, line, function, code);
 	utLog(buffer);
 
 	char* errorMessage;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 	              NULL, code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                  (LPTSTR)&errorMessage, 0, NULL);
-	utLog(errorMessage);
+	sprintf(buffer, "%s\n", errorMessage);
 	LocalFree(errorMessage);
-
-	utLog("\n");
+	utLog(buffer);
 	return 0;
 }

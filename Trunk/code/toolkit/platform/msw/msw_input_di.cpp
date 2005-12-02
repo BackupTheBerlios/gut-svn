@@ -76,7 +76,7 @@ int utx_msw_InitializeInput()
 	hr = DirectInputCreate(GetModuleHandle(NULL), DIRECTINPUT_VERSION, &my_di, NULL);
 	if (FAILED(hr))
 	{
-		utx_msw_ReportError("DirectInput8Create", hr);
+		utxLogError("DirectInput8Create", hr);
 		return false;
 	}
 
@@ -166,7 +166,7 @@ int utx_msw_PollInputDevices()
 		hr = device->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), desc->buffer, &(desc->numEvents), 0);
 		if (FAILED(hr))
 		{
-			utx_msw_ReportError("IDirectInputDevice8::GetDeviceData", hr);
+			utxLogError("IDirectInputDevice8::GetDeviceData", hr);
 			desc->numEvents = 0;
 			continue;
 		}
@@ -417,7 +417,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	HRESULT hr = my_di->CreateDevice(deviceInfo->guidInstance, (IDirectInputDevice**)&idevice, NULL);
 	if (FAILED(hr)) 
 	{
-		utx_msw_ReportError("IDirectInput::CreateDevice", hr);
+		utxLogError("IDirectInput::CreateDevice", hr);
 		return DIENUM_CONTINUE;
 	}
 
@@ -457,7 +457,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	if (FAILED(hr))
 	{
 		idevice->Release();
-		utx_msw_ReportError("IDirectInputDevice8::SetDataFormat", hr);
+		utxLogError("IDirectInputDevice8::SetDataFormat", hr);
 		return DIENUM_CONTINUE;
 	}
 
@@ -472,7 +472,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	if (FAILED(hr))
 	{
 		idevice->Release();
-		utx_msw_ReportError("IDirectInputDevice8::SetProperty", hr);
+		utxLogError("IDirectInputDevice8::SetProperty", hr);
 		return DIENUM_CONTINUE;
 	}
 
@@ -484,7 +484,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	if (FAILED(hr)) 
 	{
 		idevice->Release();
-		utx_msw_ReportError("IDirectInputDevice8::GetCapabilities", hr);
+		utxLogError("IDirectInputDevice8::GetCapabilities", hr);
 		return DIENUM_CONTINUE;
 	}
 
@@ -525,10 +525,10 @@ void myAcquireDevice(IDirectInputDevice2* device)
 	{
 		hr = device->Acquire();
 		if (FAILED(hr))
-			utx_msw_ReportError("IDirectInputDevice8::Acquire", hr);
+			utxLogError("IDirectInputDevice8::Acquire", hr);
 	}
 	else
 	{
-		utx_msw_ReportError("IDirectInputDevice8::SetCooperativeLevel", hr);
+		utxLogError("IDirectInputDevice8::SetCooperativeLevel", hr);
 	}
 }

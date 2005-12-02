@@ -64,7 +64,7 @@ utWindow utxCreateWindow(const char* title, int width, int height)
 	                       NULL, NULL, hInstance, NULL);
 	if (hWnd == NULL)
 	{
-		utx_msw_ReportError("CreateWindowEx", GetLastError());
+		utxLogError("CreateWindowEx", GetLastError());
 		return NULL;
 	}
 

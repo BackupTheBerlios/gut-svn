@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - msw_platform.h
+ * GameGut - gl_graphics.h
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,13 +13,23 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "core/msw/errors.h"
-#include "platform/platform.h"
+#include "graphics/graphics.h"
 
-/* Window management */
-LRESULT CALLBACK utx_msw_WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
-/* User input handling */
-int utx_msw_InitializeInput();
-int utx_msw_ShutdownInput();
-int utx_msw_PollInputDevices();
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+
+/* Base class for the platform specific rendering APIs */
+struct utxRenderTarget : Referenced
+{
+	int width, height;
+};
+
+
+utRenderTarget utxCreateWindowTarget(void* window);
+
