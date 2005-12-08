@@ -16,4 +16,7 @@
 /* Internal API */
 int  utxInitializeGraphics();
 int  utxShutdownGraphics();
+
+void utxReleaseAllIndexBuffers();
 void utxReleaseAllRenderTargets();
+void utxReleaseAllVertexBuffers();

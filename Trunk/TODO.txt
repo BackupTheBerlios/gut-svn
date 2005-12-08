@@ -1,5 +1,7 @@
-* Referenced counted classes using base new/delete calls,
-  need to map to custom allocators
+* Getting a memory leak from graphics code on Linux
+
+* graphics test: spin the model, change the test data to a cube,
+  hardcode some simple vertex lighting. 
   
 * I think the "write info about the input device to the log" 
   really ought to be in ut_input.cpp, not the platform layers.
@@ -8,7 +10,8 @@
 * Add a window minimized or hidden event
 
 * I don't like utFindWindowByHandle(), or rather I don't like
-  the implementation of using a base class for it.
+  the implementation of using a base class for it. Maybe use
+  the same approach as the graphics classes? 
 
 
 -----------------------------------------------------------------

@@ -118,7 +118,14 @@ utRenderTarget utxCreateWindowTarget(void* window)
 		return NULL;
 	}
 
-	wglMakeCurrent(hDC, hRC);
+	if (!wglMakeCurrent(hDC, hRC))
+	{
+		utxLogError("wglMakeCurrent", GetLastError());
+		wglDeleteContext(hRC);
+		ReleaseDC(hWnd, hDC);
+		DestroyWindow(hWnd);
+		return NULL;
+	}
 
 	/* All set */
 	utxMswRenderTarget* target = utNEW utxMswRenderTarget;

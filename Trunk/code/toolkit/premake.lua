@@ -90,6 +90,7 @@ package.language = "c++"
 	}
 
 	addmodule("core")
+	addmodule("math")
 
 	if (not options["no-platform"]) then
 		addmodule("platform")

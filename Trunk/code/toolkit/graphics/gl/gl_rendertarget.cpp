@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - gl_rendertarget.cpp
+ * GameGut - graphics/gl/gl_rendertarget.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 

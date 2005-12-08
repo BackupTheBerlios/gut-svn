@@ -24,7 +24,15 @@
 #include <GL/glu.h>
 
 
-/* Base class for the platform specific rendering APIs */
+struct utxIndexBuffer : Referenced
+{
+	int* data;
+	int size;
+
+	virtual ~utxIndexBuffer();
+};
+
+
 struct utxRenderTarget : Referenced
 {
 	virtual ~utxRenderTarget() { }
@@ -32,5 +40,14 @@ struct utxRenderTarget : Referenced
 };
 
 
-utRenderTarget utxCreateWindowTarget(void* window);
 
+struct utxVertexBuffer : Referenced
+{
+	float* data;
+	int size;
+
+	virtual ~utxVertexBuffer();
+};
+
+
+utRenderTarget utxCreateWindowTarget(void* window);

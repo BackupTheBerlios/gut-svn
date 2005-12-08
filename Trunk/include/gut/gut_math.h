@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - gut.h
+ * GameGut - gut_math.h
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,34 +13,7 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#if !defined(GAMEGUT_H_)
-#define GAMEGUT_H_
-
-#define GUT_VERSION      "@BUILD@"
-
-#if defined(_WIN32)
-	#if defined(GUT_DLL)
-		#define UT_DECLSPEC __declspec(dllexport)
-	#else
-		#define UT_DECLSPEC __declspec(dllimport)
-	#endif
-	#define UT_CALLBACK    __stdcall
-#else
-	#define UT_DECLSPEC
-	#define UT_CALLBACK 
-#endif
-
-#define UT_EXPORT         extern "C" UT_DECLSPEC
-
-
-/* Major subsystems */
-UT_EXPORT int utInitialize();
-UT_EXPORT int utShutdown();
-
-#include "gut_memory.h"
-#include "gut_logging.h"
-#include "gut_math.h"
-#include "gut_platform.h"
-#include "gut_graphics.h"
-
-#endif
+UT_EXPORT void utMatrix4Copy(float* dest, const float* src);
+UT_EXPORT void utMatrix4Perspective(float* matrix, float fieldOfView, float aspectRatio, float nearClip, float farClip);
+UT_EXPORT void utMatrix4SetIdentity(float* matrix);
+UT_EXPORT void utMatrix4Translation(float* matrix, float x, float y, float z);

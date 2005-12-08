@@ -20,7 +20,25 @@
 #include <windows.h>
 #endif
 
+/* Some simple data for rendering */
+float vertices[] = 
+{
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.5f,  0.5f, 0.0f,
+	-0.5f,  0.5f, 0.0f
+};
+
+int indices[] = 
+{
+	0, 1, 2,
+	0, 2, 3
+};
+
+
 static utRenderTarget target;
+static utIndexBuffer ibuf;
+static utVertexBuffer vbuf;
 static bool keepRunning;
 
 
@@ -47,9 +65,6 @@ void UT_CALLBACK onEvent(utEvent* event)
 void UT_CALLBACK onLogMessage(const char* message)
 {
 	printf(message);
-#if defined(_WIN32)
-	OutputDebugString(message);
-#endif
 }
 
 
@@ -64,6 +79,16 @@ void tick()
 {
 	utBeginFrame();
 	utClear(0.2f, 0.0f, 0.2f, 1.0f);
+
+	float matrix[16];
+	utMatrix4Perspective(matrix, 1.0f, (640.0f / 480.0f), 0.1f, 100.0f);
+	utSetRenderMatrix(UT_MATRIX_PROJECTION, matrix);
+
+	utMatrix4Translation(matrix, 0.0f, 0.0f, -2.0f);
+	utSetRenderMatrix(UT_MATRIX_MODEL, matrix);
+
+	utDraw(vbuf, ibuf, 0, UT_DRAW_ALL);
+
 	utEndFrame();
 	utSwapRenderTarget(target);
 }
@@ -74,20 +99,39 @@ int main()
 	utSetLogHandler(onLogMessage);
 	utInitialize();
 
+	/* Create a window */
 	utWindow wnd = utCreateWindow("Toolkit Graphics Test", 640, 480);
 	if (wnd == NULL)
 		die("Failed to create window");
 
+	/* Attach a render target to the window */
 	void* hwnd = utGetWindowHandle(wnd);
 	target = utCreateWindowTarget(hwnd);
 
+	/* Build some geometry for rendering */
+	int count = sizeof(vertices) / sizeof(float); 
+	vbuf = utCreateVertexBuffer(count, UT_BUFFER_NONE);
+	if (vbuf == NULL)
+		die("Unable to create vertex buffer!");
+	if (!utCopyVertexData(vbuf, vertices, count))
+		die("Unable to copy vertices!");
+
+	count = sizeof(indices) / sizeof(int);
+	ibuf = utCreateIndexBuffer(count, UT_BUFFER_NONE);
+	if (ibuf == NULL)
+		die("Unable to create index buffer!");
+	if (!utCopyIndexData(ibuf, indices, count))
+		die("Unable to copy indices!");
+
+	/* Run the event loop */
 	utSetEventHandler(onEvent);
 	keepRunning = true;
-	while (utPollEvents(true) && keepRunning)
+	while (utPollEvents(false) && keepRunning)
 	{
 		tick();
 	}
 
+	/* Clean up */
 	utShutdown();
 	return 0;
 }

@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - gl_graphics.cpp
+ * GameGut - graphics/gl/gl_graphics.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -16,15 +16,26 @@
 #include "core/core.h"
 #include "gl_graphics.h"
 
+/* Render matrices */
+static float my_projMatrix[16];
+static float my_viewMatrix[16];
+static float my_modelMatrix[16];
+
 
 int utxInitializeGraphics()
 {
+	/* Initialize all rendering matrices to identity */
+	utMatrix4SetIdentity(my_projMatrix);
+	utMatrix4SetIdentity(my_viewMatrix);
+	utMatrix4SetIdentity(my_modelMatrix);
 	return true;
 }
 
 
 int utxShutdownGraphics()
 {
+	utxReleaseAllIndexBuffers();
+	utxReleaseAllVertexBuffers();
 	utxReleaseAllRenderTargets();
 	return true;
 }
@@ -32,9 +43,12 @@ int utxShutdownGraphics()
 
 int utBeginFrame()
 {
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glCullFace(GL_BACK);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	return true;
 }
 
@@ -47,7 +61,54 @@ int utClear(float r, float g, float b, float a)
 }
 
 
+int utDraw(utVertexBuffer vertices, utIndexBuffer indices, int start, int count)
+{
+	int stride = 0;
+	
+	if (count == UT_DRAW_ALL)
+		count = indices->size;
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, stride, vertices->data);
+
+	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, indices->data);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	return true;
+}
+
+
 int utEndFrame()
 {
+	return true;
+}
+
+
+int utSetRenderMatrix(utRenderMatrix which, const float* matrix)
+{
+	switch (which)
+	{
+	case UT_MATRIX_PROJECTION:
+		utMatrix4Copy(my_projMatrix, matrix);
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(my_projMatrix);
+		return true;
+
+	case UT_MATRIX_VIEW:
+		utMatrix4Copy(my_viewMatrix, matrix);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(my_viewMatrix);
+		glMultMatrixf(my_modelMatrix);
+		break;
+
+	case UT_MATRIX_MODEL:
+		utMatrix4Copy(my_modelMatrix, matrix);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(my_viewMatrix);
+		glMultMatrixf(my_modelMatrix);
+		break;
+	}
+
 	return true;
 }
