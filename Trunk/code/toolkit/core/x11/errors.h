@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - platform/x11/x11_platform.h
+ * GameGut - core/x11/errors.h
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,22 +13,5 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "platform/platform.h"
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-extern Display* utx_display;
-extern Atom     utx_wmDeleteAtom;
-
-struct utxWindow : utxWindowBase
-{
-	int      screen;
-	Window   window;
-	int      width, height;
-
-	~utxWindow()
-	{
-		XDestroyWindow(utx_display, window);
-	}
-};
+int utxLogErrorFunc(const char* function, const char* file, int line);
+#define utxLogError(func)  utxLogErrorFunc(func, __FILE__, __LINE__)

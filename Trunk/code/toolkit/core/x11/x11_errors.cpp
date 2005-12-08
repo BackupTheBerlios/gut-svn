@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - x11_errors.cpp
+ * GameGut - core/x11/x11_errors.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,21 +13,20 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
-#include "core/core.h"
-#include "x11_platform.h"
 #include <stdio.h>
+#include "core/core.h"
+#include "errors.h"
 
 
 /****************************************************************************
- * Called by the X11 code when an error is encountered; right now it just
- * dumps a simple message to the log. Later on I'd like to query the OS for
- * more information about the error, like I do in the Windows port.
+ * Called by the X11 code when an error is encountered; I need to try to
+ * pull more information about the error from the OS. See the MSW version.
  ****************************************************************************/
 
-int utxReportX11Error_(const char* function, const char* file, int line)
+int utxLogErrorFunc(const char* function, const char* file, int line)
 {
-	char buffer[1024];
-	sprintf(buffer, "%s(%d): call to %s() failed\n ", file, line, function);
+	char buffer[8192];
+	sprintf(buffer, "%s(%d): call to %s() failed\n", file, line, function);
 	utLog(buffer);
 	return 0;
 }

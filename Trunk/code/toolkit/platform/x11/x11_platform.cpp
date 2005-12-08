@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include "core/core.h"
+#include "core/x11/errors.h"
 #include "x11_platform.h"
 
 Display* utx_display = NULL;
@@ -25,7 +26,7 @@ int utxInitializePlatform()
 	 * the windows. This might cause trouble with multihead systems */
 	utx_display = XOpenDisplay(NULL);
 	if (utx_display == NULL)
-		return utxReportX11Error("XOpenDisplay");
+		return utxLogError("XOpenDisplay");
 
 	/* Setup "window closed" notifications */
 	utx_wmDeleteAtom = XInternAtom(utx_display, "WM_DELETE_WINDOW", False);

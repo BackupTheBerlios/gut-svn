@@ -50,7 +50,7 @@ echo "BUILDING RELEASE BINARY..."
 echo ""
 
 cd GameGuts-$1
-premake --target gnu
+premake --clean --target gnu
 make CONFIG=Release
 if [ $? -ne 0 ]; then
 	echo ""

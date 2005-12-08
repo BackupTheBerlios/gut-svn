@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include "core/core.h"
+#include "core/x11/errors.h"
 #include "x11_platform.h"
 
 utWindow utxCreateWindow(const char* title, int width, int height)
@@ -39,7 +40,7 @@ utWindow utxCreateWindow(const char* title, int width, int height)
 	                       &attributes);
 	if (!window)
 	{
-		utxReportX11Error("XCreateWindow");
+		utxLogError("XCreateWindow");
 		return NULL;
 	}
 
