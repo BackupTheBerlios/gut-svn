@@ -29,7 +29,7 @@ struct utxX11RenderTarget : utxRenderTarget
 	
 	~utxX11RenderTarget()
 	{
-		puts("Warning: ~utxX11RenderTarget() not implemented");
+		glXDestroyContext(display, context);
 	}
 };
 
@@ -44,9 +44,9 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	}
 
 	/* Get some information about the target window */
-	Window x11w = (Window)window;
+	Window x11window = (Window)window;
 	XWindowAttributes xwa;
-	XGetWindowAttributes(display, x11w, &xwa);
+	XGetWindowAttributes(display, x11window, &xwa);
 	
 	int screen = DefaultScreen(display);
 
@@ -67,10 +67,12 @@ utRenderTarget utxCreateWindowTarget(void* window)
 		return NULL;
 	}
 
+	glXMakeCurrent(display, x11window, context);
+
 	/* All set */
 	utxX11RenderTarget* target = utNEW utxX11RenderTarget;
 	target->display = display;
-	target->window = (Window)window;
+	target->window = x11window;
 	target->context = context;
 	target->width = xwa.width;
 	target->height = xwa.height;
@@ -80,6 +82,8 @@ utRenderTarget utxCreateWindowTarget(void* window)
 
 int utResizeRenderTarget(utRenderTarget target, int width, int height)
 {
+	target->width = width;
+	target->height = height;
 	return true;
 }
 
