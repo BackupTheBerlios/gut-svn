@@ -36,6 +36,7 @@ int utxShutdownGraphics()
 {
 	utxReleaseAllIndexBuffers();
 	utxReleaseAllVertexBuffers();
+	utxReleaseAllVertexFormats();
 	utxReleaseAllRenderTargets();
 	return true;
 }
@@ -43,11 +44,31 @@ int utxShutdownGraphics()
 
 int utBeginFrame()
 {
+	/* Initialize matrices to something reasonable */
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	/* Set up a useful default state. This will all get phased out once
+	 * I've gotten the the shader code sorted */
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glCullFace(GL_CCW);
+
+	GLfloat position [] = { 1.0, 1.0, 1.0, 0.0 };
+	GLfloat specular [] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat shininess [] = { 100.0 };
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
 	return true;
 }
@@ -61,20 +82,39 @@ int utClear(float r, float g, float b, float a)
 }
 
 
-int utDraw(utVertexBuffer vertices, utIndexBuffer indices, int start, int count)
+int utDraw(utVertexBuffer vertices, utVertexFormat format, utIndexBuffer indices, int start, int count)
 {
-	int stride = 0;
-	
+	float* ptr = vertices->data;
+	for (int i = 0; i < format->count; ++i)
+	{
+		switch (format->attributes[i])
+		{
+		case UT_VERTEX_POSITION:
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, format->stride, ptr);
+			ptr += 3;
+			break;
+		case UT_VERTEX_NORMAL:
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glNormalPointer(GL_FLOAT, format->stride, ptr);
+			ptr += 3;
+			break;
+		case UT_VERTEX_TEXTURE2:
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_FLOAT, format->stride, ptr);
+			ptr += 2;
+			break;
+		}
+	}
+
 	if (count == UT_DRAW_ALL)
 		count = indices->size;
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, stride, vertices->data);
 
 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, indices->data);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	return true;
 }
 

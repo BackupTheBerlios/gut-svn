@@ -16,6 +16,9 @@
 #include "core/core.h"
 #include "gl_graphics.h"
 
+/* This is _real_ barebones right now; I'm just trying to get something
+ * on the screen quickly so I can bring the physics online */
+
 /* Keep track of all open buffers so I can close them at exit */
 static utxArray<utVertexBuffer> my_buffers;
 

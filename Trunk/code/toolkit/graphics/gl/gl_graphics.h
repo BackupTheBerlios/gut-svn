@@ -26,10 +26,9 @@
 
 struct utxIndexBuffer : Referenced
 {
+	virtual ~utxIndexBuffer();
 	int* data;
 	int size;
-
-	virtual ~utxIndexBuffer();
 };
 
 
@@ -43,10 +42,18 @@ struct utxRenderTarget : Referenced
 
 struct utxVertexBuffer : Referenced
 {
+	virtual ~utxVertexBuffer();
 	float* data;
 	int size;
+};
 
-	virtual ~utxVertexBuffer();
+
+struct utxVertexFormat : Referenced
+{
+	virtual ~utxVertexFormat();
+	utVertexAttribute* attributes;
+	int count;
+	int stride;
 };
 
 

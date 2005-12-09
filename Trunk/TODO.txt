@@ -1,8 +1,5 @@
 * Getting a memory leak from graphics code on Linux
 
-* graphics test: spin the model, change the test data to a cube,
-  hardcode some simple vertex lighting. 
-  
 * I think the "write info about the input device to the log" 
   really ought to be in ut_input.cpp, not the platform layers.
   Requires a generic API to query device information

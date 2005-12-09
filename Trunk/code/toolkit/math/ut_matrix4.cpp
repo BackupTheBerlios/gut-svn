@@ -25,6 +25,33 @@ void utMatrix4Copy(float* dest, const float* src)
 }
 
 
+void utMatrix4Multiply(float* result, const float* m0, const float* m1)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		result[_(i,0)] = m0[_(0,0)] * m1[_(i,0)] + 
+		                 m0[_(1,0)] * m1[_(i,1)] +
+							  m0[_(2,0)] * m1[_(i,2)] +
+							  m0[_(3,0)] * m1[_(i,3)];
+
+		result[_(i,1)] = m0[_(0,1)] * m1[_(i,0)] + 
+		                 m0[_(1,1)] * m1[_(i,1)] +
+							  m0[_(2,1)] * m1[_(i,2)] +
+							  m0[_(3,1)] * m1[_(i,3)];
+
+		result[_(i,2)] = m0[_(0,2)] * m1[_(i,0)] + 
+		                 m0[_(1,2)] * m1[_(i,1)] +
+							  m0[_(2,2)] * m1[_(i,2)] +
+							  m0[_(3,2)] * m1[_(i,3)];
+
+		result[_(i,3)] = m0[_(0,3)] * m1[_(i,0)] + 
+		                 m0[_(1,3)] * m1[_(i,1)] +
+							  m0[_(2,3)] * m1[_(i,2)] +
+							  m0[_(3,3)] * m1[_(i,3)];
+	}
+}
+
+
 void utMatrix4Perspective(float* matrix, float fieldOfView, float aspectRatio, float nearClip, float farClip)
 {
 	float ty = fieldOfView * 0.5f;
@@ -51,6 +78,31 @@ void utMatrix4Perspective(float* matrix, float fieldOfView, float aspectRatio, f
 	matrix[_(3,1)] = 0.0f;
 	matrix[_(3,2)] = -1.0f;
 	matrix[_(3,3)] = 0.0f;
+}
+
+
+void utMatrix4RotationFromAngleAxis(float* matrix, float angle, float x, float y, float z)
+{
+	float s = sinf(angle);
+	float c = cosf(angle);
+	float t = 1.0f - c;
+
+	matrix[_(0,0)] = t * x * x + c;
+	matrix[_(0,1)] = t * y * x - s * z;
+	matrix[_(0,2)] = t * z * x + s * y;
+	matrix[_(0,3)] = 0.0f;
+	matrix[_(1,0)] = t * x * y + s * z;
+	matrix[_(1,1)] = t * y * y + c;
+	matrix[_(1,2)] = t * z * y - s * x;
+	matrix[_(1,3)] = 0.0f;
+	matrix[_(2,0)] = t * x * z - s * y;
+	matrix[_(2,1)] = t * y * z + s * x;
+	matrix[_(2,2)] = t * z * z + c;
+	matrix[_(2,3)] = 0.0f;
+	matrix[_(3,0)] = 0.0f;
+	matrix[_(3,1)] = 0.0f;
+	matrix[_(3,2)] = 0.0f;
+	matrix[_(3,3)] = 1.0f;
 }
 
 

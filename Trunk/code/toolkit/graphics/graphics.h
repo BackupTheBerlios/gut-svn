@@ -20,3 +20,4 @@ int  utxShutdownGraphics();
 void utxReleaseAllIndexBuffers();
 void utxReleaseAllRenderTargets();
 void utxReleaseAllVertexBuffers();
+void utxReleaseAllVertexFormats();
