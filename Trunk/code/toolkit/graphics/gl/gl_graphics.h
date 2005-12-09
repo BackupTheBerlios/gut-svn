@@ -39,6 +39,12 @@ struct utxRenderTarget : Referenced
 };
 
 
+struct utxTexture : Referenced
+{
+	virtual ~utxTexture();
+	GLuint handle;
+};
+
 
 struct utxVertexBuffer : Referenced
 {

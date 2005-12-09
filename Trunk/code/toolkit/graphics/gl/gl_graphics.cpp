@@ -35,6 +35,7 @@ int utxInitializeGraphics()
 int utxShutdownGraphics()
 {
 	utxReleaseAllIndexBuffers();
+	utxReleaseAllTextures();
 	utxReleaseAllVertexBuffers();
 	utxReleaseAllVertexFormats();
 	utxReleaseAllRenderTargets();
@@ -150,5 +151,20 @@ int utSetRenderMatrix(utRenderMatrix which, const float* matrix)
 		break;
 	}
 
+	return true;
+}
+
+
+int utSetTexture(int stage, utTexture texture)
+{
+	if (texture != NULL)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture->handle);
+	}
+	else
+	{
+		glDisable(GL_TEXTURE_2D);
+	}
 	return true;
 }

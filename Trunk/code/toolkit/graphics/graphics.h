@@ -19,5 +19,6 @@ int  utxShutdownGraphics();
 
 void utxReleaseAllIndexBuffers();
 void utxReleaseAllRenderTargets();
+void utxReleaseAllTextures();
 void utxReleaseAllVertexBuffers();
 void utxReleaseAllVertexFormats();

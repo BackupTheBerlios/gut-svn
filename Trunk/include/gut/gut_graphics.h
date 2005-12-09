@@ -25,6 +25,12 @@ enum utRenderMatrix
 	UT_MATRIX_MODEL
 };
 
+enum utTextureFormat
+{
+	UT_TEXTURE_RGB8,
+	UT_TEXTURE_RGBA8
+};
+
 enum utVertexAttribute
 {
 	UT_VERTEX_POSITION,
@@ -38,11 +44,13 @@ enum utVertexAttribute
 
 struct utxIndexBuffer;
 struct utxRenderTarget;
+struct utxTexture;
 struct utxVertexBuffer;
 struct utxVertexFormat;
 
 typedef struct utxIndexBuffer*  utIndexBuffer;
 typedef struct utxRenderTarget* utRenderTarget;
+typedef struct utxTexture*      utTexture;
 typedef struct utxVertexBuffer* utVertexBuffer;
 typedef struct utxVertexFormat* utVertexFormat;
 
@@ -52,6 +60,7 @@ UT_EXPORT int            utClear(float r, float g, float b, float a);
 UT_EXPORT int            utCopyIndexData(utIndexBuffer buffer, const int* data, int size);
 UT_EXPORT int            utCopyVertexData(utVertexBuffer buffer, const float* data, int size);
 UT_EXPORT utIndexBuffer  utCreateIndexBuffer(int size, utBufferFlags flags);
+UT_EXPORT utTexture      utCreateTexture(int width, int height, utTextureFormat format, const void* data);
 UT_EXPORT utVertexBuffer utCreateVertexBuffer(int size, utBufferFlags flags);
 UT_EXPORT utVertexFormat utCreateVertexFormat(const utVertexAttribute* attributes, int count);
 UT_EXPORT utRenderTarget utCreateWindowTarget(void* window);
@@ -60,5 +69,6 @@ UT_EXPORT int            utEndFrame();
 UT_EXPORT int            utReleaseRenderTarget(utRenderTarget target);
 UT_EXPORT int            utResizeRenderTarget(utRenderTarget target, int width, int height);
 UT_EXPORT int            utSetRenderMatrix(utRenderMatrix which, const float* matrix);
+UT_EXPORT int            utSetTexture(int stage, utTexture texture);
 UT_EXPORT int            utSwapRenderTarget(utRenderTarget target);
 UT_EXPORT int            utSwapAllRenderTargets();
