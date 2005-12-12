@@ -71,7 +71,7 @@ public:
 		my_size++;
 	}
 
-	void remove(const T item)
+	bool remove(const T item)
 	{
 		for (int i = 0; i < my_size; ++i)
 		{
@@ -81,7 +81,9 @@ public:
 				if (num > 0)
 					memmove(((T*)my_contents) + i, ((T*)my_contents) + i + 1, num * sizeof(T));
 				my_size--;
+				return true;
 			}
 		}
+		return false;
 	}
 };

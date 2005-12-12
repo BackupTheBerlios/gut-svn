@@ -39,6 +39,14 @@ utxIndexBuffer::~utxIndexBuffer()
 }
 
 
+int utReleaseIndexBuffer(utIndexBuffer buffer)
+{
+	if (my_buffers.remove(buffer))
+		buffer->release();
+	return true;
+}
+
+
 void utxReleaseAllIndexBuffers()
 {
 	for (int i = 0; i < my_buffers.size(); ++i)

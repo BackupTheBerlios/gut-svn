@@ -42,6 +42,14 @@ utxVertexBuffer::~utxVertexBuffer()
 }
 
 
+int utReleaseVertexBuffer(utVertexBuffer buffer)
+{
+	if (my_buffers.remove(buffer))
+		buffer->release();
+	return true;
+}
+
+
 void utxReleaseAllVertexBuffers()
 {
 	for (int i = 0; i < my_buffers.size(); ++i)

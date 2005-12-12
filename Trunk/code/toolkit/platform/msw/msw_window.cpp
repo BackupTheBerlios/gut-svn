@@ -104,3 +104,38 @@ int utxDestroyWindow(utWindow window)
 	return true;
 }
 
+
+int utGetWindowHeight(utWindow window)
+{
+	RECT rect;
+	GetClientRect(window->hWnd, &rect);
+	return (rect.bottom - rect.top);
+}
+
+
+int utGetWindowWidth(utWindow window)
+{
+	RECT rect;
+	GetClientRect(window->hWnd, &rect);
+	return (rect.right - rect.left);
+}
+
+
+int utResizeWindow(utWindow window, int width, int height)
+{
+	/* Get the current size of the window */
+	RECT rect;
+	GetClientRect(window->hWnd, &rect);
+	int clientWidth = rect.right - rect.left;
+	int clientHeight = rect.bottom - rect.top;
+
+	GetWindowRect(window->hWnd, &rect);
+	int frameWidth = rect.right - rect.left;
+	int frameHeight = rect.bottom - rect.top;
+
+	/* Adjust it to the new client size, taking into account borders, etc. */
+	frameWidth += width - clientWidth;
+	frameHeight += height - clientHeight;
+	MoveWindow(window->hWnd, rect.left, rect.top, frameWidth, frameHeight, TRUE);
+	return true;
+}

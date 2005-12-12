@@ -62,6 +62,14 @@ utxVertexFormat::~utxVertexFormat()
 }
 
 
+int utReleaseVertexFormat(utVertexFormat format)
+{
+	if (my_formats.remove(format))
+		format->release();
+	return true;
+}
+
+
 void utxReleaseAllVertexFormats()
 {
 	for (int i = 0; i < my_formats.size(); ++i)

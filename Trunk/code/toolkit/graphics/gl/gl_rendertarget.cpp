@@ -33,6 +33,25 @@ utRenderTarget utCreateWindowTarget(void* window)
 }
 
 
+int utGetTargetHeight(utRenderTarget target)
+{
+	return target->height;
+}
+
+
+int utGetTargetSizeInBytes(utRenderTarget target)
+{
+	/* My pixel format is hardcoded right now */
+	return (target->width * target->height * 3);
+}
+
+
+int utGetTargetWidth(utRenderTarget target)
+{
+	return target->width;
+}
+
+
 int utReleaseRenderTarget(utRenderTarget target)
 {
 	my_targets.remove(target);

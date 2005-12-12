@@ -200,11 +200,14 @@ UT_EXPORT utWindow utFindWindowByHandle(void* handle);
 UT_EXPORT utWindow utGetActiveWindow();
 UT_EXPORT int      utGetTimer();
 UT_EXPORT void*    utGetWindowHandle(utWindow window);
+UT_EXPORT int      utGetWindowHeight(utWindow window);
+UT_EXPORT int      utGetWindowWidth(utWindow window);
 UT_EXPORT int      utNumControllers();
 UT_EXPORT int      utNumKeyboards();
 UT_EXPORT int      utNumMice();
 UT_EXPORT int      utNumWindows();
 UT_EXPORT int      utPollEvents(int block);
+UT_EXPORT int      utResizeWindow(utWindow window, int width, int height);
 UT_EXPORT int      utSendEvent(utEvent* event);
 UT_EXPORT void     utSetEventHandler(utEventHandler callback);
 

@@ -405,10 +405,7 @@ void mySendCtrlEvent(MyDeviceDesc* desc, const DIDEVICEOBJECTDATA& data)
 
 BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID data)
 {
-	/* Write some information about the device to the log */
 	char msg[512];
-	sprintf(msg, "Found %s...", deviceInfo->tszInstanceName);
-	utLog(msg);
 
 	/* Open a connection to the device */
 //	IDirectInputDevice8* idevice;
@@ -450,7 +447,8 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 
 	default:
 		idevice->Release();
-		utLog("unused\n");
+		sprintf(msg, "Found %s...unused\n", deviceInfo->tszInstanceName);
+		utLog(msg);
 		return DIENUM_CONTINUE;
 	}
 
@@ -501,7 +499,8 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	/* Register this device with the input system */
 	utxRegisterInputDevice(kind, devCaps.dwButtons);
 
-	utLog("ok\n");
+	sprintf(msg, "Found %s...ok\n", deviceInfo->tszInstanceName);
+	utLog(msg);
 	return DIENUM_CONTINUE;
 }
 

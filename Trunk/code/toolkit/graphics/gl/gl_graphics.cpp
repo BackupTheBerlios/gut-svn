@@ -126,6 +126,14 @@ int utEndFrame()
 }
 
 
+int utGrabScreen(utRenderTarget target, void* buffer)
+{
+	glReadBuffer(GL_FRONT);
+	glReadPixels(0, 0, target->width, target->height, GL_BGR, GL_UNSIGNED_BYTE, buffer);
+	return true;
+}
+
+
 int utSetRenderMatrix(utRenderMatrix which, const float* matrix)
 {
 	switch (which)

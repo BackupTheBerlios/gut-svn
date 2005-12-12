@@ -66,7 +66,15 @@ UT_EXPORT utVertexFormat utCreateVertexFormat(const utVertexAttribute* attribute
 UT_EXPORT utRenderTarget utCreateWindowTarget(void* window);
 UT_EXPORT int            utDraw(utVertexBuffer vertices, utVertexFormat format, utIndexBuffer indices, int start, int count);
 UT_EXPORT int            utEndFrame();
+UT_EXPORT int            utGetTargetHeight(utRenderTarget target);
+UT_EXPORT int            utGetTargetSizeInBytes(utRenderTarget target);
+UT_EXPORT int            utGetTargetWidth(utRenderTarget target);
+UT_EXPORT int            utGrabScreen(utRenderTarget target, void* buffer);
+UT_EXPORT int            utReleaseIndexBuffer(utIndexBuffer buffer);
 UT_EXPORT int            utReleaseRenderTarget(utRenderTarget target);
+UT_EXPORT int            utReleaseTexture(utTexture texture);
+UT_EXPORT int            utReleaseVertexBuffer(utVertexBuffer buffer);
+UT_EXPORT int            utReleaseVertexFormat(utVertexFormat format);
 UT_EXPORT int            utResizeRenderTarget(utRenderTarget target, int width, int height);
 UT_EXPORT int            utSetRenderMatrix(utRenderMatrix which, const float* matrix);
 UT_EXPORT int            utSetTexture(int stage, utTexture texture);

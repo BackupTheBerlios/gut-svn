@@ -70,6 +70,12 @@ utRenderTarget utxCreateWindowTarget(void* window)
 		return NULL;
 	}
 
+	/* Read back the real width and height from the window, in case the OS
+	 * couldn't provide the requested dimensions */
+	GetClientRect(hWnd, &rect);
+	width = rect.right - rect.left;
+	height = rect.bottom - rect.top;
+
 	/* Get a drawing context for the window */
 	HDC hDC = GetDC(hWnd);
 	if (hDC == NULL) 
@@ -145,7 +151,7 @@ int utResizeRenderTarget(utRenderTarget target, int width, int height)
 	utxMswRenderTarget* mst = (utxMswRenderTarget*)target;
 	mst->width  = width;
 	mst->height = height;
-	MoveWindow(mst->hWnd, 0, 0, width, height, FALSE);
+	MoveWindow(mst->hWnd, 0, 0, width, height, TRUE);
 	glViewport(0, 0, width, height);
 	return true;
 }

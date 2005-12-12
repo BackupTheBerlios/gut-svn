@@ -78,6 +78,14 @@ utxTexture::~utxTexture()
 }
 
 
+int utReleaseTexture(utTexture texture)
+{
+	if (my_textures.remove(texture))
+		texture->release();
+	return true;
+}
+
+
 void utxReleaseAllTextures()
 {
 	for (int i = 0; i < my_textures.size(); ++i)
