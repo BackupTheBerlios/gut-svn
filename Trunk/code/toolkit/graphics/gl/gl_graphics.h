@@ -46,6 +46,8 @@ struct utxTexture : Referenced
 {
 	virtual ~utxTexture();
 	GLuint handle;
+	int width, height;
+	utTextureFormat format;
 };
 
 
@@ -67,3 +69,6 @@ struct utxVertexFormat : Referenced
 
 
 utRenderTarget utxCreateWindowTarget(void* window);
+
+int utxTestGLErrorFunc(const char* function, const char* file, int line);
+#define utxTestGLError(func)  utxTestGLErrorFunc(func, __FILE__, __LINE__)

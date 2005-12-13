@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gut/gut.h>
+#if defined(_WIN32)
+/* To write log messages to VS.NET output window, for debugging */
+#include <windows.h>
+#endif
 
 
 /* Some simple cube data for rendering */
@@ -114,12 +118,18 @@ void UT_CALLBACK onEvent(utEvent* event)
 void UT_CALLBACK onLogMessage(const char* message)
 {
 	printf(message);
+#if defined(_WIN32)
+	OutputDebugString(message);
+#endif
 }
 
 
-void die(const char* msg)
+void die(const char* message)
 {
-	puts(msg);
+	puts(message);
+#if defined(_WIN32)
+	OutputDebugString(message);
+#endif
 	exit(1);
 }
 
@@ -187,9 +197,11 @@ int main()
 	if (!utCopyIndexData(ibuf, indices, count))
 		die("Unable to copy indices!");
 
-	tex = utCreateTexture(4, 4, UT_TEXTURE_RGBA8, texture);
+	tex = utCreateTexture(4, 4, UT_TEXTURE_R8G8B8A8);
 	if (tex == NULL)
 		die("Unable to create texture!");
+	if (!utCopyTextureData(tex, texture))
+		die("Unable to copy texture!");
 
 	/* Run the event loop */
 	startTime = utGetTimer();

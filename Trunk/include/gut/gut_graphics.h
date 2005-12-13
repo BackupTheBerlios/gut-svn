@@ -27,8 +27,8 @@ enum utRenderMatrix
 
 enum utTextureFormat
 {
-	UT_TEXTURE_RGB8,
-	UT_TEXTURE_RGBA8
+	UT_TEXTURE_R8G8B8,
+	UT_TEXTURE_R8G8B8A8
 };
 
 enum utVertexAttribute
@@ -58,9 +58,10 @@ typedef struct utxVertexFormat* utVertexFormat;
 UT_EXPORT int            utBeginFrame();
 UT_EXPORT int            utClear(float r, float g, float b, float a);
 UT_EXPORT int            utCopyIndexData(utIndexBuffer buffer, const int* data, int size);
+UT_EXPORT int            utCopyTextureData(utTexture texture, const void* data);
 UT_EXPORT int            utCopyVertexData(utVertexBuffer buffer, const float* data, int size);
 UT_EXPORT utIndexBuffer  utCreateIndexBuffer(int size, utBufferFlags flags);
-UT_EXPORT utTexture      utCreateTexture(int width, int height, utTextureFormat format, const void* data);
+UT_EXPORT utTexture      utCreateTexture(int width, int height, utTextureFormat format);
 UT_EXPORT utVertexBuffer utCreateVertexBuffer(int size, utBufferFlags flags);
 UT_EXPORT utVertexFormat utCreateVertexFormat(const utVertexAttribute* attributes, int count);
 UT_EXPORT utRenderTarget utCreateWindowTarget(void* window);
