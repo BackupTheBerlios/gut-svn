@@ -190,16 +190,19 @@ namespace Sim8.GameGuts
 		bool utCopyIndexData(IntPtr buffer, int[] data, int size);
 
 		[DllImport("GameGuts")] public static extern
+		bool utCopyTextureData(IntPtr texture, byte[] data);
+
+		[DllImport("GameGuts")] public static extern
+		bool utCopyTextureData(IntPtr texture, uint[] data);
+
+		[DllImport("GameGuts")] public static extern
 		bool utCopyVertexData(IntPtr buffer, float[] data, int size);
 
 		[DllImport("GameGuts")] public static extern
 		IntPtr utCreateIndexBuffer(int size, utBufferFlags flags);
 
 		[DllImport("GameGuts")] public static extern
-		IntPtr utCreateTexture(int width, int height, utTextureFormat format, byte[] data);
-
-		[DllImport("GameGuts")] public static extern
-		IntPtr utCreateTexture(int width, int height, utTextureFormat format, uint[] data);
+		IntPtr utCreateTexture(int width, int height, utTextureFormat format);
 
 		[DllImport("GameGuts")] public static extern
 		IntPtr utCreateVertexBuffer(int size, utBufferFlags flags);
