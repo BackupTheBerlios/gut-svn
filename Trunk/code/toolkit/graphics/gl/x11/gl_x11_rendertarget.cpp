@@ -84,6 +84,7 @@ int utResizeRenderTarget(utRenderTarget target, int width, int height)
 {
 	target->width = width;
 	target->height = height;
+	glViewport(0, 0, width, height);
 	return true;
 }
 
