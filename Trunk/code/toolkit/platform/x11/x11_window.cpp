@@ -57,6 +57,8 @@ utWindow utxCreateWindow(const char* title, int width, int height)
 	result->screen  = screen;
 	result->handle  = (void*)window;
 	result->window  = window;
+	result->width   = width;
+	result->height  = height;
 	return result;
 }
 
@@ -69,4 +71,16 @@ int utxDestroyWindow(utWindow window)
 		utFREE(window);
 	}
 	return true;
+}
+
+
+int utGetWindowHeight(utWindow window)
+{
+	return window->height;
+}
+
+
+int utGetWindowWidth(utWindow window)
+{
+	return window->width;
 }
