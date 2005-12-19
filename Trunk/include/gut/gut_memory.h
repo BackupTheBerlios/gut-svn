@@ -38,3 +38,6 @@ UT_EXPORT int   utGetFreeCount();
 	#define utREALLOC(ptr, size) utRealloc(ptr, size, NULL, 0)
 	#define utFREE(ptr)    utFree(ptr, NULL, 0)
 #endif
+
+/* Rudimentary memory debugging - not ready for production use */
+UT_EXPORT void utShowMemoryReport();
