@@ -40,4 +40,5 @@ UT_EXPORT int   utGetFreeCount();
 #endif
 
 /* Rudimentary memory debugging - not ready for production use */
+UT_EXPORT void utEnableMemoryDebugging();
 UT_EXPORT void utShowMemoryReport();

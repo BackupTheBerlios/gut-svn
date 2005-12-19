@@ -13,6 +13,7 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
+#include <stdio.h>
 #include "core.h"
 
 /* A rudimentary memory tracking system, thrown together to help identify
@@ -20,8 +21,83 @@
  * based on Paul Nettle's FlipCode articles. If there is any demand I will
  * dig it up and hook it into the Toolkit */
 
+typedef struct MyAllocInfo
+{
+	void* address;
+	const char* filename;
+	int fileline;
+} MyAllocInfo;
+
+static const int MAX_ALLOCS = 1000;
+static MyAllocInfo my_allocs[MAX_ALLOCS];
+static int my_nextAlloc;
+
+static void* MyDebugAlloc(size_t size, const char* file, int line);
+static void* MyDebugRealloc(void* ptr, size_t size, const char* file, int line);
+static void  MyDebugFree(void* ptr, const char* file, int line);
+
+
+void utEnableMemoryDebugging()
+{
+	utSetAllocHandlers(MyDebugAlloc, MyDebugRealloc, MyDebugFree);
+	my_nextAlloc = 0;
+}
+
+
 void utShowMemoryReport()
 {
-	utLog("*** Memory Report goes here ***\n");
+	for (int i = 0; i < my_nextAlloc; ++i)
+	{
+		if (my_allocs[i].address != NULL)
+			printf("%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
+	}
+}
+
+
+/**********************************************************************
+ * Debug memory operators
+ **********************************************************************/
+
+static int MyIndexOf(void* address)
+{
+	for (int i = 0; i < my_nextAlloc; ++i)
+	{
+		if (my_allocs[i].address == address)
+			return i;
+	}
+	return -1;
+}
+
+static void* MyDebugAlloc(size_t size, const char* file, int line)
+{
+	void* address = malloc(size);
+
+	if (my_nextAlloc < MAX_ALLOCS)
+	{
+		my_allocs[my_nextAlloc].address = address;
+		my_allocs[my_nextAlloc].filename = file;
+		my_allocs[my_nextAlloc].fileline = line;
+		my_nextAlloc++;
+	}
+
+	return address;
+}
+
+static void* MyDebugRealloc(void* ptr, size_t size, const char* file, int line)
+{
+	void* address = realloc(ptr, size);
+
+	int index = MyIndexOf(ptr);
+	if (index >= 0)
+		my_allocs[index].address = address;
+
+   return address ;
+}
+
+static void MyDebugFree(void* ptr, const char* file, int line)
+{
+	free(ptr);
+	int index = MyIndexOf(ptr);
+		my_allocs[index].address = NULL;
 }
 

@@ -221,5 +221,6 @@ int main()
 
 	/* Clean up */
 	utShutdown();
+	utShowMemoryReport();
 	return 0;
 }
