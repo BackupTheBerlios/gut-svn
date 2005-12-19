@@ -46,11 +46,19 @@ void utEnableMemoryDebugging()
 
 void utShowMemoryReport()
 {
+	int count = 0;
 	for (int i = 0; i < my_nextAlloc; ++i)
 	{
 		if (my_allocs[i].address != NULL)
+		{
 			printf("%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
+			count++;
+		}
 	}
+
+	char msg[512];
+	sprintf(msg, "%d leaks detected\n", count);
+	utLog(msg);
 }
 
 
