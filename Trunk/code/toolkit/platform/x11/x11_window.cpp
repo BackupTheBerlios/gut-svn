@@ -13,9 +13,11 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
+#include <stdio.h>
 #include "core/core.h"
 #include "core/x11/errors.h"
 #include "x11_platform.h"
+
 
 utWindow utxCreateWindow(const char* title, int width, int height)
 {
@@ -53,6 +55,12 @@ utWindow utxCreateWindow(const char* title, int width, int height)
 	XSetWMProtocols(utx_display, window, &utx_wmDeleteAtom, 1);
 	XMapWindow(utx_display, window);
 
+	/* Get the real width and height */
+	XWindowAttributes xwa;
+	XGetWindowAttributes(utx_display, window, &xwa);
+	width = xwa.width;
+	height = xwa.height;
+
 	utWindow result = utALLOCT(utxWindow);
 	result->screen  = screen;
 	result->handle  = (void*)window;
@@ -83,4 +91,13 @@ int utGetWindowHeight(utWindow window)
 int utGetWindowWidth(utWindow window)
 {
 	return window->width;
+}
+
+
+int utResizeWindow(utWindow window, int width, int height)
+{
+	XResizeWindow(utx_display, window->window, width, height);
+	window->width = width;
+	window->height = height;
+	return true;
 }

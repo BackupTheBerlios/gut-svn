@@ -74,7 +74,7 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	target->display = display;
 	target->window = x11window;
 	target->context = context;
-	target->width = xwa.width;
+	target->width =  xwa.width;
 	target->height = xwa.height;
 	return target;
 }
