@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include "core.h"
 
+#if defined(_DEBUG)
+
 /* A rudimentary memory tracking system, thrown together to help identify
  * memory leaks in the X11 port. I have a real tracking system somewhere,
  * based on Paul Nettle's FlipCode articles. If there is any demand I will
@@ -118,3 +120,21 @@ static void MyDebugFree(void* ptr, const char* file, int line)
 	}
 }
 
+#else
+
+/**********************************************************************
+ * In release mode, stub out the API
+ **********************************************************************/
+
+void utEnableMemoryDebugging()
+{
+	utLog("Memory debugging disabled in release builds\n");
+}
+
+
+void utShowMemoryReport()
+{
+	utLog("Memory reporting disabled in release builds\n");
+}
+
+#endif

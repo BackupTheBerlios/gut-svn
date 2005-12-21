@@ -39,6 +39,11 @@ struct Referenced
 		return utAlloc(size, file, line);;
 	}
 	
+	static void operator delete(void* ptr, const char* file, int line)
+	{
+		return utFree(ptr, file, line);
+	}
+
 	static void operator delete(void* ptr)
 	{
 		utFree(ptr, NULL, 0);
