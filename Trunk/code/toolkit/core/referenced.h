@@ -14,9 +14,9 @@
  **********************************************************************/
 
 
-/****************************************************************************
- * A simple reference-counted base class and matching smart pointer template
- ****************************************************************************/
+/**********************************************************************
+ * A reference-counted base class and matching smart pointer template
+ *********************************************************************/
 
 struct Referenced
 {
@@ -33,6 +33,16 @@ struct Referenced
 	{ if (--ref <= 0) utDELETE this; }
 
 	int ref;
+	
+	static void* operator new(size_t size, const char* file, int line)
+	{
+		return utAlloc(size, file, line);;
+	}
+	
+	static void operator delete(void* ptr)
+	{
+		utFree(ptr, NULL, 0);
+	} 
 };
 
 

@@ -18,27 +18,32 @@
  * allocator functions.
  **********************************************************************/
 
-inline void* operator new(size_t size, const char* file, int line)
+/*
+#include <new>
+
+inline void* operator new(size_t size) throw (std::bad_alloc)
+{
+	return utAlloc(size, NULL, 0);
+}
+	
+inline void* operator new(size_t size, const char* file, int line) throw (std::bad_alloc)
 {
 	return utAlloc(size, file, line);
 }
 
-inline void operator delete(void* ptr, const char* file, int line)
+inline void operator delete(void* ptr, const char* file, int line) throw (std::bad_alloc)
 {
 	utFree(ptr, file, line);
 }
 
-inline void operator delete(void* ptr)
+inline void operator delete(void* ptr) throw (std::bad_alloc)
 {
 	utFREE(ptr);
 }
 
+*/
 
-#if defined(_DEBUG)
-	#define utNEW     new(__FILE__,__LINE__)
-	#define utDELETE  delete
-#else
-	#define utNEW  new
-	#define utDELETE
-#endif
+#define utNEW     new(__FILE__,__LINE__)
+#define utDELETE  delete
+
 

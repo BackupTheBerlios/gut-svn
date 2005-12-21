@@ -41,22 +41,26 @@ void utEnableMemoryDebugging()
 {
 	utSetAllocHandlers(MyDebugAlloc, MyDebugRealloc, MyDebugFree);
 	my_nextAlloc = 0;
+	utLog("Memory debugging enabled\n");
 }
 
 
 void utShowMemoryReport()
 {
+	char msg[8192];
+	
+	utLog("Memory report:\n");
 	int count = 0;
 	for (int i = 0; i < my_nextAlloc; ++i)
 	{
 		if (my_allocs[i].address != NULL)
 		{
-			printf("%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
+			sprintf(msg, "%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
+			utLog(msg);
 			count++;
 		}
 	}
 
-	char msg[512];
 	sprintf(msg, "%d leaks detected\n", count);
 	utLog(msg);
 }
@@ -97,7 +101,9 @@ static void* MyDebugRealloc(void* ptr, size_t size, const char* file, int line)
 
 	int index = MyIndexOf(ptr);
 	if (index >= 0)
+	{
 		my_allocs[index].address = address;
+	}
 
    return address ;
 }
@@ -106,6 +112,9 @@ static void MyDebugFree(void* ptr, const char* file, int line)
 {
 	free(ptr);
 	int index = MyIndexOf(ptr);
+	if (index >= 0)
+	{
 		my_allocs[index].address = NULL;
+	}
 }
 

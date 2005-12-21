@@ -35,24 +35,18 @@
 
 
 /* Memory callback functions */
-static utAllocHandler   my_allocHandler;
-static utReallocHandler my_reallocHandler;
-static utFreeHandler    my_freeHandler;
+static utAllocHandler   my_allocHandler   = NULL;
+static utReallocHandler my_reallocHandler = NULL;
+static utFreeHandler    my_freeHandler    = NULL;
 
 /* Memory metrics */
-static int my_allocCount;
-static int my_reallocCount;
-static int my_freeCount;
+static int my_allocCount   = 0;
+static int my_reallocCount = 0;
+static int my_freeCount    = 0;
 
 
 int utxInitializeMemory()
 {
-	my_allocHandler = NULL;
-	my_reallocHandler = NULL;
-	my_freeHandler = NULL;
-	my_allocCount = 0;
-	my_reallocCount = 0;
-	my_freeCount = 0;
 	return true;
 }
 

@@ -13,6 +13,7 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
+#include <stdio.h>
 #include "core/core.h"
 #include "gl_graphics.h"
 
