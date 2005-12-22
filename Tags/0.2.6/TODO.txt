@@ -1,0 +1,44 @@
+* Add GUT_BUILD define to make version checking in code easier.
+  Perhaps an API call to return the version at compile time.
+
+* I think the "write info about the input device to the log" 
+  really ought to be in ut_input.cpp, not the platform layers.
+  Requires a generic API to query device information
+
+* Add a window minimized or hidden event
+
+* I don't like utFindWindowByHandle(), or rather I don't like
+  the implementation of using a base class for it. Maybe use
+  the same approach as the graphics classes? 
+
+
+-----------------------------------------------------------------
+ Input System Notes
+-----------------------------------------------------------------
+ 
+Should support both action maps and character codes. Should be
+able to poll current states and also receive notification events.
+How are actions mapped (a device ID I think, which can be 
+converted to/from a string representation). Also, how to take an
+inventory of input devices and know when it has changed? Should
+be able to tell when USB devices have been plugged into a 
+different port. So instead of mapping "Controller0" try to map
+"Gravis Pro 1000" and then locate it. There may be more than
+one device with the same name (?) so will still need an offset
+on that perhaps.
+
+Also need to be able to provide a default mapping, which might
+include keyboard directional keys, mouse movement, and maybe 
+even a default controller configuration. I may not care about
+what controller is plugged in, I may just want Ctrl0. So that
+should be possible. The toolkit isn't going to provide any
+action mapping so I don't have to worry about that.
+
+int utGetInputDeviceByType(int type, int i);  /* where type is one of keyboard, mouse, etc. */
+int utGetInputDeviceByDescription(const char* description, int i); 
+
+int utGetButtonState(int deviceId, int buttonId);
+int utGetAxisState(int deviceId, int axisId);
+int utGetHatState(int deviceId, int hatId);
+
+int utEnableKeyboardRepeat(int ixKeyboard, int fEnable);
