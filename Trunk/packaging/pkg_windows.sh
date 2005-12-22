@@ -24,6 +24,9 @@ echo ""
 echo "Did you update CHANGES.txt?"
 read line
 echo ""
+echo "Did you copy the .NET bindings from Flat Four?"
+read line
+echo ""
 echo "Did you create a tag for version $1?"
 read line
 echo ""
@@ -58,6 +61,7 @@ echo ""
 echo "REMOVING PRIVATE FILES..."
 echo ""
 
+cd GameGuts-$1
 rm -rf `find . -name .svn`
 rm -rf packaging
 rm -rf design

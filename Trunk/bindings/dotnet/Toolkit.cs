@@ -23,6 +23,7 @@ namespace Sim8.GameGuts
 	public class Toolkit
 	{
 		#region Initialization Interface
+		
 		[DllImport("GameGuts")] public static extern 
 		bool utInitialize();
 
@@ -75,6 +76,13 @@ namespace Sim8.GameGuts
 		[DllImport("GameGuts")] public static extern 
 		int utGetFreeCount();
 		
+		/* Rudimentary memory tracking - not ready for production use */
+		[DllImport("GameGuts")] public static extern 
+		void utEnableMemoryDebugging();
+
+		[DllImport("GameGuts")] public static extern 
+		void utShowMemoryReport();
+			
 		#endregion
 
 		#region Event Processing Interface

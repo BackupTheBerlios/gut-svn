@@ -2,17 +2,17 @@
 
 2. Update support files
 
-3. Create tag in Subversion
+3. Copy .NET bindings from Flat Four
 
-4. Run the WINDOWS packaging script
+4. Create tag in Subversion
 
-5. Run the LINUX packaging script
+5. Run the WINDOWS packaging script
 
-6. Create SF.net file release
+6. Run the LINUX packaging script
 
-7. Publish updated documentation
+7. Create SF.net file release
 
-8. Post release notice on site
+8. Publish updated documentation
 
-9. Post release notice to mailing list
+9. Post release notice on site and mailing list
 
