@@ -1,16 +1,15 @@
 GameGuts - A Unified Toolkit for Game Engine Development
-Version @BUILD@ (@DATE@)
+Version 0.2.6 (2005-12-21)
 
- Copyright (c) 1999-@YEAR@ by Jason Perkins
+ Copyright (c) 1999-2005 by Jason Perkins
  All Rights Reserved
 
 
 ABOUT THIS RELEASE
 
- The project scaffolding is now in place. Over the next few
- versions I will be starting the basic platform abstraction
- services including windowing, user input, and access to the
- system timer.
+ Basic platform abstraction is handled. The next series of
+ releases will focus on creating a simple graphics system
+ abstraction with basic rendering and state management.
  
  For more information, including complete documentation, 
  visit the project website at http://gut.sourceforge.net/

@@ -16,7 +16,7 @@
 #if !defined(GAMEGUT_H_)
 #define GAMEGUT_H_
 
-#define GUT_VERSION      "@BUILD@"
+#define GUT_VERSION      "0.2.6"
 
 #if defined(_WIN32)
 	#if defined(GUT_DLL)

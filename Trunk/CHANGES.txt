@@ -1,6 +1,15 @@
+0.2.6 (Build 6)
+---------------------------------------------------------
+Added simple graphics API over OpenGL. Handles frame
+buffer setup, vertex and index buffers, textures, and
+render matrices.
+
+
 0.1.5 (Build 5)
 ---------------------------------------------------------
 Added basic mouse support.
+
+Added game controller support for Windows.
 
 
 0.1.4 (Build 4)

@@ -15,7 +15,10 @@ echo ""
 echo "Is the version ($1) in the format Major.Minor.Build?"
 read line
 echo ""
-echo "Did you update the project status in README.txt?"
+echo "Did you update the version, date, and project status in README.txt?"
+read line
+echo ""
+echo "Did you update the version and date in gut.h?"
 read line
 echo ""
 echo "Did you update CHANGES.txt?"
@@ -35,8 +38,7 @@ read line
 #####################################################################
 # Stage 1: Preparation
 #
-# Pull the source code from Subversion and update the embedded
-# version numbers.
+# Pull the source code from Subversion
 #####################################################################
 
 echo ""
@@ -44,27 +46,6 @@ echo "RETRIEVING SOURCE CODE FROM REPOSITORY..."
 echo ""
 cd ../..
 svn co https://svn.berlios.de/svnroot/repos/gut/Tags/$1 GameGuts-$1
-
-echo ""
-echo "UPDATING VERSION STRINGS..."
-echo ""
-cd GameGuts-$1
-
-build_str=$1
-date_str=`date +%F`
-year_str=`date +%Y`
-
-sed -e "s/@BUILD@/$build_str/" -e "s/@DATE@/$date_str/" -e "s/@YEAR@/$year_str/" README.txt > README.tmp
-mv README.tmp README.txt
-
-cd include/gut
-sed -e "s/@BUILD@/$build_str/" -e "s/@DATE@/$date_str/" -e "s/@YEAR@/$year_str/" gut.h > gut.tmp
-mv gut.tmp gut.h
-cd ../..
-
-echo ""
-echo "UPDATING TAG WITH NEW VERSON NUMBERS..."
-svn ci -m "Updated version numbers"
 
 
 #####################################################################

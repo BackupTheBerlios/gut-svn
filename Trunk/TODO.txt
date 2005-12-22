@@ -1,4 +1,5 @@
-* Getting a memory leak from graphics code on Linux
+* Add GUT_BUILD define to make version checking in code easier.
+  Perhaps an API call to return the version at compile time.
 
 * I think the "write info about the input device to the log" 
   really ought to be in ut_input.cpp, not the platform layers.
