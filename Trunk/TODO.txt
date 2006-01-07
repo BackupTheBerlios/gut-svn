@@ -11,6 +11,9 @@
   the implementation of using a base class for it. Maybe use
   the same approach as the graphics classes? 
 
+* Create a Lua plugin module
+
+* New switch --with-dotnet will build an assembly for .NET binding
 
 -----------------------------------------------------------------
  Input System Notes
