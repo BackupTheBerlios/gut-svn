@@ -17,36 +17,52 @@
 #include "platform/platform.h"
 #include "graphics/graphics.h"
 
+static int my_initCount = 0;
 
 int utInitialize()
 {
-	utLog("GameGuts Toolkit version " GUT_VERSION "\n");
-	utLog("Beginning Toolkit initialization\n");
+	if (my_initCount == 0)
+	{
+		my_initCount++;
 
-	if (!utxInitializeMemory())    return false;
+		utLog("GameGuts Toolkit version " GUT_VERSION "\n");
+		utLog("Beginning Toolkit initialization\n");
+
+		if (!utxInitializeMemory())    return false;
 #if !defined(NO_PLATFORM)
-	if (!utxInitializePlatform())  return false;
+		if (!utxInitializePlatform())  return false;
 #endif
 #if !defined(NO_GRAPHICS)
-	if (!utxInitializeGraphics())  return false;
+		if (!utxInitializeGraphics())  return false;
 #endif
 
-	utLog("Toolkit initialization complete\n");
+		utLog("Toolkit initialization complete\n");
+	}
 	return true;
 }
 
 
 int utShutdown()
 {
-	utLog("Shutting down GameGuts Toolkit\n");
+	/* If I'm already shutdown, just return */
+	if (my_initCount == 0)
+		return true;
 
-	bool result = true;
+	my_initCount--;
+	if (my_initCount == 0)
+	{
+		utLog("Shutting down GameGuts Toolkit\n");
+
+		bool result = true;
 #if !defined(NO_GRAPHICS)
-	result = result && utxShutdownGraphics();
+		result = result && utxShutdownGraphics();
 #endif
 #if !defined(NO_PLATFORM)
-	result = result && utxShutdownPlatform();
+		result = result && utxShutdownPlatform();
 #endif
-	result = result && utxShutdownMemory();
-	return result;
+		result = result && utxShutdownMemory();
+		return result;
+	}
+
+	return true;
 }
