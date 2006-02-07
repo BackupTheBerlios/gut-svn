@@ -17,7 +17,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Sim8.GameGuts
+namespace GameGuts
 {
 	[CLSCompliant(false)]
 	public class Toolkit

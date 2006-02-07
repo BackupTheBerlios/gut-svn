@@ -1,7 +1,6 @@
-package.name = "GameGuts_DotNet"
+package.name = "GameGuts.NET"
 package.kind = "dll"
 package.language = "c#"
-package.target = "Sim8.GameGuts"
 
 package.defines =
 {
