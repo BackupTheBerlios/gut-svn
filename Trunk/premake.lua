@@ -7,6 +7,7 @@ project.name = "GameGuts"
 
 	addoption("no-graphics", "Exclude the graphics API from the build")
 	addoption("no-platform", "Exclude the platform abstraction API from the build")
+	addoption("with-dotnet", "Build the .NET bindings library")
 	addoption("with-tests",  "Include the test suite applications")
 
 
@@ -30,6 +31,10 @@ project.name = "GameGuts"
 
 	dopackage("code/toolkit")
 
+	if (options["with-dotnet"]) then
+		dopackage("bindings/dotnet")
+	end
+	
 
 -- Clean up some additional files; extra code here to make it work on
 -- both Premake v2.x and Premake v3.x, will phase out later
