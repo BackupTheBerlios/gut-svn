@@ -61,7 +61,7 @@ int utxShutdownMemory()
 	if (my_allocCount != my_freeCount)
 	{
 		char buffer[512];
-		sprintf(buffer, "Memory allocation mismatch: %d allocs, %d frees\n", my_allocCount, my_freeCount); 
+		sprintf_s(buffer, 512, "Memory allocation mismatch: %d allocs, %d frees\n", my_allocCount, my_freeCount); 
 		utLog(buffer);
 		return false;
 	}

@@ -57,13 +57,13 @@ void utShowMemoryReport()
 	{
 		if (my_allocs[i].address != NULL)
 		{
-			sprintf(msg, "%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
+			sprintf_s(msg, 8192, "%s(%d): memory leak detected\n", my_allocs[i].filename, my_allocs[i].fileline);
 			utLog(msg);
 			count++;
 		}
 	}
 
-	sprintf(msg, "%d leaks detected\n", count);
+	sprintf_s(msg, 8192, "%d leaks detected\n", count);
 	utLog(msg);
 }
 

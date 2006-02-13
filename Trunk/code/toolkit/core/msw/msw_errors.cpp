@@ -27,14 +27,14 @@
 int utxLogErrorFunc(const char* function, HRESULT code, const char* file, int line)
 {
 	char buffer[8192];
-	sprintf(buffer, "%s(%d): call to %s() failed with error code %x:\n", file, line, function, code);
+	sprintf_s(buffer, 8192, "%s(%d): call to %s() failed with error code %x:\n", file, line, function, code);
 	utLog(buffer);
 
 	char* errorMessage;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 	              NULL, code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                  (LPTSTR)&errorMessage, 0, NULL);
-	sprintf(buffer, "%s\n", errorMessage);
+	sprintf_s(buffer, 8192, "%s\n", errorMessage);
 	LocalFree(errorMessage);
 	utLog(buffer);
 	return 0;

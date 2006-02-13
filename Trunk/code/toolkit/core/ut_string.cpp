@@ -1,5 +1,5 @@
 /**********************************************************************
- * GameGut - graphics/gl/gl_errors.cpp
+ * GameGut - ut_string.cpp
  * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
@@ -13,23 +13,21 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
+#include "core.h"
 #include <stdio.h>
-#include "core/core.h"
-#include "gl_graphics.h"
+#include <stdlib.h>
+#include <stdarg.h>
 
-int utxTestGLErrorFunc(const char* function, const char* file, int line)
+
+#if !defined(_MSC_VER) || (_MSC_VER < 1400)
+
+int sprintf_s(char* buffer, size_t len, const char* format, ...)
 {
-	GLenum code = glGetError();
-	if (code != GL_NO_ERROR)
-	{
-		char buffer[8192];
-		sprintf_s(buffer, 8192, "%s(%d): call to %s() failed with error code %x: %s\n", file, line, function, code, gluErrorString(code));
-		utLog(buffer);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	va_list args;
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	return 0;
 }
 
+#endif

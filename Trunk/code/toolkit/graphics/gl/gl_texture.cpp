@@ -140,7 +140,7 @@ static bool MyIdentifyFormat(MyFormatInfo* info, utTextureFormat format)
 		break;
 	default:
 		char msg[128];
-		sprintf(msg, "Invalid texture format: %d\n", format);
+		sprintf_s(msg, 128, "Invalid texture format: %d\n", format);
 		utLog(msg);
 		return false;
 	}

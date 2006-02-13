@@ -447,7 +447,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 
 	default:
 		idevice->Release();
-		sprintf(msg, "Found %s...unused\n", deviceInfo->tszInstanceName);
+		sprintf_s(msg, 512, "Found %s...unused\n", deviceInfo->tszInstanceName);
 		utLog(msg);
 		return DIENUM_CONTINUE;
 	}
@@ -499,7 +499,7 @@ BOOL CALLBACK utx_msw_EnumDevicesCallback(LPCDIDEVICEINSTANCE deviceInfo, LPVOID
 	/* Register this device with the input system */
 	utxRegisterInputDevice(kind, devCaps.dwButtons);
 
-	sprintf(msg, "Found %s...ok\n", deviceInfo->tszInstanceName);
+	sprintf_s(msg, 512, "Found %s...ok\n", deviceInfo->tszInstanceName);
 	utLog(msg);
 	return DIENUM_CONTINUE;
 }
