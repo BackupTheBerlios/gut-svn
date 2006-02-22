@@ -264,6 +264,9 @@ namespace GameGuts
 		bool utSetTexture(int stage, IntPtr texture);
 		
 		[DllImport("GameGuts")] public static extern
+		bool utSwapRenderTarget(IntPtr target);
+
+		[DllImport("GameGuts")] public static extern
 		bool utSwapAllRenderTargets();
 
 		#endregion
