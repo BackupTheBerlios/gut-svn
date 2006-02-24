@@ -36,10 +36,23 @@ struct utxX11RenderTarget : utxRenderTarget
 
 utRenderTarget utxCreateWindowTarget(void* window)
 {
-	Display* display = XOpenDisplay(NULL);
+	/* Connect to the display */
+	char* name = getenv("DISPLAY");
+	if (name == NULL) name = ":0.0";
+
+	Display* display = XOpenDisplay(name);
 	if (display == NULL)
 	{
 		utxLogError("XOpenDisplay");
+		return NULL;
+	}
+
+	int screen = DefaultScreen(display);
+
+	/* Make sure GLX is available */
+	if (!glXQueryExtension(display, NULL, NULL))
+	{
+		utxLogError("glXQueryExtension");
 		return NULL;
 	}
 
@@ -48,8 +61,6 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	XWindowAttributes xwa;
 	XGetWindowAttributes(display, x11window, &xwa);
 	
-	int screen = DefaultScreen(display);
-
 	/* Hardcode a pixel format for now...I'll come back to this */
 	int surface[] = { GLX_RGBA, GLX_DEPTH_SIZE, 1, GLX_DOUBLEBUFFER, None };
 	XVisualInfo* visual = glXChooseVisual(display, screen, surface);

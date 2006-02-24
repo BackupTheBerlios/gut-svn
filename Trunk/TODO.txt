@@ -13,8 +13,6 @@
 
 * Create a Lua plugin module
 
-* New switch --with-dotnet will build an assembly for .NET binding
-
 -----------------------------------------------------------------
  Input System Notes
 -----------------------------------------------------------------

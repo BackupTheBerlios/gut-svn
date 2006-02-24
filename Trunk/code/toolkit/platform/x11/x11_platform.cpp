@@ -24,7 +24,9 @@ int utxInitializePlatform()
 {
 	/* I create a single connection to the display and share it among all of
 	 * the windows. This might cause trouble with multihead systems */
-	utx_display = XOpenDisplay(NULL);
+	char* name = getenv("DISPLAY");
+	if (name == NULL) name = ":0.0";
+	utx_display = XOpenDisplay(name);
 	if (utx_display == NULL)
 		return utxLogError("XOpenDisplay");
 
