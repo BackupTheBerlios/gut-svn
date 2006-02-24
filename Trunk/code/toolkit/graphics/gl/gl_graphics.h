@@ -15,16 +15,21 @@
 
 #include "graphics/graphics.h"
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(FORCE_X11)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#if !defined(GL_BGR) 
-#define GL_BGR GL_BGR_EXT 
-#endif
 #endif
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#if !defined(GL_BGR_EXT)
+	#define GL_BGR_EXT 0x80E0
+#endif
+
+#if !defined(GL_BGR)
+	#define GL_BGR GL_BGR_EXT
+#endif
 
 
 struct utxIndexBuffer : Referenced

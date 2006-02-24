@@ -9,6 +9,7 @@ project.name = "GameGuts"
 	addoption("no-platform", "Exclude the platform abstraction API from the build")
 	addoption("with-dotnet", "Build the .NET bindings library")
 	addoption("with-tests",  "Include the test suite applications")
+	addoption("with-x11",    "Use the X11 platform, even on Windows")
 
 
 -- Set config specific output directories
