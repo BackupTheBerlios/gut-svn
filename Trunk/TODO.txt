@@ -1,3 +1,8 @@
+* Move X11 display pointer out of platform and into core, if it
+  really needs to be shared between platform and graphics code.
+  Put it behind a wrapper function that retrieves the pointer
+  if it is currently NULL.
+
 * Add GUT_BUILD define to make version checking in code easier.
   Perhaps an API call to return the version at compile time.
 

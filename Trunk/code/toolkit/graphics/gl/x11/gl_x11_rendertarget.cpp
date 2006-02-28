@@ -30,9 +30,9 @@ struct utxX11RenderTarget : utxRenderTarget
 	
 	~utxX11RenderTarget()
 	{
-#if HOLDING
 		glXDestroyContext(display, context);
-#endif
+		XUnmapWindow(display, window);
+		XDestroyWindow(display, window);
 	}
 };
 
@@ -40,89 +40,81 @@ utRenderTarget utxCreateWindowTarget(void* window)
 {
 	int screen = DefaultScreen(utx_display);
 
-	XSetWindowAttributes attributes;
-	attributes.background_pixel = WhitePixel(utx_display, screen);
-	attributes.border_pixel = 0;
-	attributes.colormap = XDefaultColormap(utx_display, screen);
-
-	Window gfxWnd = XCreateWindow(utx_display, (Window)window,
-	                       10, 10, 100, 100, 
-						   0,
-	                       CopyFromParent, 
-						   CopyFromParent, 
-						   CopyFromParent, /* visual */
-	                       CWBackPixel | CWBorderPixel | CWColormap, 
-	                       &attributes);
-	if (!gfxWnd)
-	{
-		utxLogError("XCreateWindow");
-		return NULL;
-	}
-
-	XMapRaised(utx_display, gfxWnd);
-
-#if HOLDING
 	/* Make sure GLX is available */
-	if (!glXQueryExtension(display, NULL, NULL))
+	if (!glXQueryExtension(utx_display, NULL, NULL))
 	{
 		utxLogError("glXQueryExtension");
 		return NULL;
 	}
 
-	/* Get some information about the target window */
-	Window x11window = (Window)window;
-	XWindowAttributes xwa;
-	XGetWindowAttributes(display, x11window, &xwa);
-	
 	/* Hardcode a pixel format for now...I'll come back to this */
 	int surface[] = { GLX_RGBA, GLX_DEPTH_SIZE, 1, GLX_DOUBLEBUFFER, None };
-	XVisualInfo* visual = glXChooseVisual(display, screen, surface);
-	if (visual == NULL)
+	XVisualInfo* vi = glXChooseVisual(utx_display, screen, surface);
+	if (vi == NULL)
 	{
 		utxLogError("glXChooseVisual");
 		return NULL;
 	}
 
 	/* Create the rendering context */
-	GLXContext context = glXCreateContext(display, visual, NULL, True);
+	GLXContext context = glXCreateContext(utx_display, vi, None, GL_TRUE);
 	if (context == NULL)
 	{
 		utxLogError("glXCreateContext");
 		return NULL;
 	}
 
-	glXMakeCurrent(display, x11window, context);
-#endif
+	/* Get some information about the parent window */
+	Window parent = (Window)window;
+	XWindowAttributes xwa;
+	XGetWindowAttributes(utx_display, parent, &xwa);
+
+	/* Create a child window to hold the graphics. This approach helps
+	 * avoid conflicts with the parent window settings, which may come
+	 * from an external toolkit */
+	XSetWindowAttributes attributes;
+	Window child = XCreateWindow(utx_display, parent,
+	                       0, 0, xwa.width, xwa.height, 0,
+	                       CopyFromParent, CopyFromParent, 
+						   vi->visual, None, &attributes);
+	if (!child)
+	{
+		utxLogError("XCreateWindow");
+		return NULL;
+	}
+
+	/* Activate the new rendering window */
+	XMapRaised(utx_display, child);
+	glXMakeCurrent(utx_display, child, context);
 
 	/* All set */
 	utxX11RenderTarget* target = utNEW utxX11RenderTarget;
 	target->display = utx_display;
-	target->window = gfxWnd;
-#if HOLDING
+	target->window = child;
 	target->context = context;
 	target->width =  xwa.width;
 	target->height = xwa.height;
-#endif
 	return target;
 }
 
 
 int utResizeRenderTarget(utRenderTarget target, int width, int height)
 {
-#if HOLDING
-	target->width = width;
-	target->height = height;
+	/* Resize the rendering window */
+	utxX11RenderTarget* x11t = (utxX11RenderTarget*)target;
+	XResizeWindow(x11t->display, x11t->window, width, height);
+
+	/* Apply the change */
+	x11t->width = width;
+	x11t->height = height;
 	glViewport(0, 0, width, height);
-#endif
 	return true;
 }
 
 
 int utSwapRenderTarget(utRenderTarget target)
 {
-#if HOLDING
 	utxX11RenderTarget* x11t = (utxX11RenderTarget*)target;
 	glXSwapBuffers(x11t->display, x11t->window);
-#endif
 	return true;
 }

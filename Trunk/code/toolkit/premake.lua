@@ -24,7 +24,7 @@ package.language = "c++"
 	package.buildflags =
 	{
 		"no-64bit-checks",
-		"no-rtti"
+		-- "no-rtti"
 	}
 	
 	package.config["Release"].buildflags =
