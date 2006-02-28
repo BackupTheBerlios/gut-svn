@@ -176,6 +176,8 @@ int main()
 	/* Attach a render target to the window */
 	void* hwnd = utGetWindowHandle(wnd);
 	target = utCreateWindowTarget(hwnd);
+	if (target == NULL)
+		die("Unable to create windowed render target!");
 
 	/* Build some geometry for rendering */
 	int count = sizeof(vertices) / sizeof(float); 
