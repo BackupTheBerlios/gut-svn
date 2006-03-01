@@ -31,8 +31,6 @@ struct utxX11RenderTarget : utxRenderTarget
 	~utxX11RenderTarget()
 	{
 		glXDestroyContext(display, context);
-		XUnmapWindow(display, window);
-		XDestroyWindow(display, window);
 	}
 };
 
