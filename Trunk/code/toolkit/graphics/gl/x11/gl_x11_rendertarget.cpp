@@ -34,12 +34,16 @@ struct utxX11RenderTarget : utxRenderTarget
 	}
 };
 
-utRenderTarget utxCreateWindowTarget(void* window)
+utRenderTarget utxCreateWindowTarget(void* display_, void* window)
 {
-	int screen = DefaultScreen(utx_display);
+	Display* display = (Display*)display_;
+	if (display == NULL)
+		display = utx_display;
+		
+	int screen = DefaultScreen(display);
 
 	/* Make sure GLX is available */
-	if (!glXQueryExtension(utx_display, NULL, NULL))
+	if (!glXQueryExtension(display, NULL, NULL))
 	{
 		utxLogError("glXQueryExtension");
 		return NULL;
@@ -47,7 +51,7 @@ utRenderTarget utxCreateWindowTarget(void* window)
 
 	/* Hardcode a pixel format for now...I'll come back to this */
 	int surface[] = { GLX_RGBA, GLX_DEPTH_SIZE, 1, GLX_DOUBLEBUFFER, None };
-	XVisualInfo* vi = glXChooseVisual(utx_display, screen, surface);
+	XVisualInfo* vi = glXChooseVisual(display, screen, surface);
 	if (vi == NULL)
 	{
 		utxLogError("glXChooseVisual");
@@ -55,7 +59,7 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	}
 
 	/* Create the rendering context */
-	GLXContext context = glXCreateContext(utx_display, vi, None, GL_TRUE);
+	GLXContext context = glXCreateContext(display, vi, None, GL_TRUE);
 	if (context == NULL)
 	{
 		utxLogError("glXCreateContext");
@@ -65,13 +69,13 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	/* Get some information about the parent window */
 	Window parent = (Window)window;
 	XWindowAttributes xwa;
-	XGetWindowAttributes(utx_display, parent, &xwa);
+	XGetWindowAttributes(display, parent, &xwa);
 
 	/* Create a child window to hold the graphics. This approach helps
 	 * avoid conflicts with the parent window settings, which may come
 	 * from an external toolkit */
 	XSetWindowAttributes attributes;
-	Window child = XCreateWindow(utx_display, parent,
+	Window child = XCreateWindow(display, parent,
 	                       0, 0, xwa.width, xwa.height, 0,
 	                       CopyFromParent, CopyFromParent, 
 						   vi->visual, None, &attributes);
@@ -82,12 +86,12 @@ utRenderTarget utxCreateWindowTarget(void* window)
 	}
 
 	/* Activate the new rendering window */
-	XMapRaised(utx_display, child);
-	glXMakeCurrent(utx_display, child, context);
+	XMapRaised(display, child);
+	glXMakeCurrent(display, child, context);
 
 	/* All set */
 	utxX11RenderTarget* target = utNEW utxX11RenderTarget;
-	target->display = utx_display;
+	target->display = display;
 	target->window = child;
 	target->context = context;
 	target->width =  xwa.width;

@@ -21,9 +21,9 @@
 static utxArray<utRenderTarget> my_targets;
 
 
-utRenderTarget utCreateWindowTarget(void* window)
+utRenderTarget utCreateWindowTarget(void* display, void* window)
 {
-	utRenderTarget target = utxCreateWindowTarget(window);
+	utRenderTarget target = utxCreateWindowTarget(display, window);
 	if (target == NULL)
 		return NULL;
 	

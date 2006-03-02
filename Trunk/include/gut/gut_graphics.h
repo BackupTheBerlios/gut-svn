@@ -64,7 +64,7 @@ UT_EXPORT utIndexBuffer  utCreateIndexBuffer(int size, utBufferFlags flags);
 UT_EXPORT utTexture      utCreateTexture(int width, int height, utTextureFormat format);
 UT_EXPORT utVertexBuffer utCreateVertexBuffer(int size, utBufferFlags flags);
 UT_EXPORT utVertexFormat utCreateVertexFormat(const utVertexAttribute* attributes, int count);
-UT_EXPORT utRenderTarget utCreateWindowTarget(void* window);
+UT_EXPORT utRenderTarget utCreateWindowTarget(void* display, void* window);
 UT_EXPORT int            utDraw(utVertexBuffer vertices, utVertexFormat format, utIndexBuffer indices, int start, int count);
 UT_EXPORT int            utEndFrame();
 UT_EXPORT int            utGetTargetHeight(utRenderTarget target);

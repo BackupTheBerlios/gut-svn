@@ -73,7 +73,7 @@ struct utxVertexFormat : Referenced
 };
 
 
-utRenderTarget utxCreateWindowTarget(void* window);
+utRenderTarget utxCreateWindowTarget(void* display, void* window);
 
 int utxTestGLErrorFunc(const char* function, const char* file, int line);
 #define utxTestGLError(func)  utxTestGLErrorFunc(func, __FILE__, __LINE__)

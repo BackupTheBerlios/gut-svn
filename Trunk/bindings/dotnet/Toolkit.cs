@@ -219,7 +219,7 @@ namespace GameGuts
 		IntPtr utCreateVertexFormat(utVertexAttribute[] attributes, int count);
 
 		[DllImport("GameGuts")] public static extern
-		IntPtr utCreateWindowTarget(IntPtr parentWindow);
+		IntPtr utCreateWindowTarget(IntPtr display, IntPtr parentWindow);
 
 		[DllImport("GameGuts")] public static extern
 		bool utDraw(IntPtr vertices, IntPtr format, IntPtr indices, int start, int count);
