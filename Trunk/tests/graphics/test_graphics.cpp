@@ -173,7 +173,7 @@ void tick()
 	utSetRenderMatrix(UT_MATRIX_MODEL, matrix);
 
 	utSetTexture(0, tex);
-//	utDraw(vbuf, vfmt, ibuf, 0, UT_DRAW_ALL);
+	utDraw(vbuf, vfmt, ibuf, 0, UT_DRAW_ALL);
 
 	/* Draw some points and lines */
 	utMatrix4Identity(matrix);

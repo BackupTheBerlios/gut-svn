@@ -225,6 +225,13 @@ namespace GameGuts
 		bool utDraw(IntPtr vertices, IntPtr format, IntPtr indices, int start, int count);
 
 		[DllImport("GameGuts")] public static extern
+		bool utDrawLines(float[] vertices, int count);
+
+		[DllImport("GameGuts")] public static extern
+		bool utDrawPoints(float[] vertices, int count);
+
+		[DllImport("GameGuts")]
+		public static extern
 		bool utEndFrame();
 
 		[DllImport("GameGuts")] public static extern
