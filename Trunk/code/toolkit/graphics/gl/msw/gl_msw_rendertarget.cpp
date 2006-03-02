@@ -37,7 +37,7 @@ struct utxMswRenderTarget : utxRenderTarget
 
 
 
-utRenderTarget utxCreateWindowTarget(void* window)
+utRenderTarget utxCreateWindowTarget(void* display, void* window)
 {
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	HWND frameWnd = (HWND)window;

@@ -55,8 +55,10 @@ int utBeginFrame()
 	 * I've gotten the the shader code sorted */
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_POINT_SMOOTH);
 
 	glCullFace(GL_CCW);
+	glPointSize(5.0f);
 
 	GLfloat position [] = { 1.0, 1.0, 1.0, 0.0 };
 	GLfloat specular [] = { 1.0, 1.0, 1.0, 1.0 };

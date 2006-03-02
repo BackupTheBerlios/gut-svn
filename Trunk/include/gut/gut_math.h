@@ -14,6 +14,7 @@
  **********************************************************************/
 
 UT_EXPORT void utMatrix4Copy(float* dest, const float* src);
+UT_EXPORT void utMatrix4Identity(float* matrix);
 UT_EXPORT void utMatrix4Multiply(float* result, const float* m0, const float* m1);
 UT_EXPORT void utMatrix4Perspective(float* matrix, float fieldOfView, float aspectRatio, float nearClip, float farClip);
 UT_EXPORT void utMatrix4RotationFromAngleAxis(float* matrix, float angle, float x, float y, float z);

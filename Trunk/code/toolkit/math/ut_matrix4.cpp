@@ -25,6 +25,27 @@ void utMatrix4Copy(float* dest, const float* src)
 }
 
 
+void utMatrix4Identity(float* matrix)
+{
+	matrix[_(0,0)] = 1.0f;
+	matrix[_(0,1)] = 0.0f;
+	matrix[_(0,2)] = 0.0f;
+	matrix[_(0,3)] = 0.0f;
+	matrix[_(1,0)] = 0.0f;
+	matrix[_(1,1)] = 1.0f;
+	matrix[_(1,2)] = 0.0f;
+	matrix[_(1,3)] = 0.0f;
+	matrix[_(2,0)] = 0.0f;
+	matrix[_(2,1)] = 0.0f;
+	matrix[_(2,2)] = 1.0f;
+	matrix[_(2,3)] = 0.0f;
+	matrix[_(3,0)] = 0.0f;
+	matrix[_(3,1)] = 0.0f;
+	matrix[_(3,2)] = 0.0f;
+	matrix[_(3,3)] = 1.0f;
+}
+
+
 void utMatrix4Multiply(float* result, const float* m0, const float* m1)
 {
 	for (int i = 0; i < 4; ++i)

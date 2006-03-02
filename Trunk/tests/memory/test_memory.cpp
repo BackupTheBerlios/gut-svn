@@ -61,7 +61,7 @@ void die(const char* msg, ...)
 	va_list args;
 
 	va_start(args, msg);
-	vsprintf(buffer, msg, args);
+	vsprintf_s(buffer, 512, msg, args);
 	va_end(args);
 	puts(buffer);
 	exit(1);

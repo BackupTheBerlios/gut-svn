@@ -30,4 +30,9 @@ int sprintf_s(char* buffer, size_t len, const char* format, ...)
 	return 0;
 }
 
+int vsprintf_s(char* buffer, size_t len, const char* format, va_list args)
+{
+	return vsprintf(buffer, format, args);
+}
+
 #endif

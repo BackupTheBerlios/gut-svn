@@ -82,6 +82,23 @@ int texture[] =
 	0xffffffff, 0xffffffff, 0xff000000, 0xff000000
 };
 
+/* Vertices for line drawing */
+float lineverts[] =
+{
+	-0.9f, -0.9f, 0.0f,
+	 0.9f, -0.9f, 0.0f,
+	 0.9f, -0.9f, 0.0f,
+	 0.9f,  0.9f, 0.0f
+};
+
+float pointverts[] =
+{
+	-0.9f, 0.9f, 0.0f,
+	-0.3f, 0.9f, 0.0f,
+	 0.3f, 0.9f, 0.0f,
+	 0.9f, 0.9f, 0.0f
+};
+
 
 /* My rendering objects */
 static utRenderTarget target;
@@ -156,7 +173,13 @@ void tick()
 	utSetRenderMatrix(UT_MATRIX_MODEL, matrix);
 
 	utSetTexture(0, tex);
-	utDraw(vbuf, vfmt, ibuf, 0, UT_DRAW_ALL);
+//	utDraw(vbuf, vfmt, ibuf, 0, UT_DRAW_ALL);
+
+	/* Draw some points and lines */
+	utMatrix4Identity(matrix);
+	utSetRenderMatrix(UT_MATRIX_MODEL, matrix);
+	utDrawPoints(pointverts, sizeof(pointverts)/sizeof(float)/3);
+	utDrawLines(lineverts, sizeof(lineverts)/sizeof(float)/3);
 
 	utEndFrame();
 	utSwapRenderTarget(target);
@@ -175,7 +198,7 @@ int main()
 
 	/* Attach a render target to the window */
 	void* hwnd = utGetWindowHandle(wnd);
-	target = utCreateWindowTarget(hwnd);
+	target = utCreateWindowTarget(NULL, hwnd);
 	if (target == NULL)
 		die("Unable to create windowed render target!");
 
@@ -218,7 +241,7 @@ int main()
 
 	char result[128];
 	float elapsed = (utGetTimer() - startTime) / 1000.0f;
-	sprintf(result, "FPS: %f\n", numFrames / elapsed);
+	sprintf_s(result, 128, "FPS: %f\n", numFrames / elapsed);
 	utLog(result);
 
 	/* Clean up */

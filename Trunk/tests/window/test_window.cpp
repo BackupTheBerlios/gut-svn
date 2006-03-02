@@ -30,23 +30,23 @@ void UT_CALLBACK onEvent(utEvent* event)
 	switch (event->what)
 	{
 	case UT_EVENT_WINDOW_FOCUS:
-		sprintf(message, "Window #%d focus is %d\n", which, event->arg0);
+		sprintf_s(message, 1024, "Window #%d focus is %d\n", which, event->arg0);
 		utLog(message);
 		break;
 
 	case UT_EVENT_WINDOW_CLOSE:
-		sprintf(message, "Window #%d is closing\n", which);
+		sprintf_s(message, 1024, "Window #%d is closing\n", which);
 		utLog(message);
 		utDestroyWindow(event->window);
 		break;
 
 	case UT_EVENT_WINDOW_REDRAW:
-		sprintf(message, "Window #%d needs redraw\n", which);
+		sprintf_s(message, 1024, "Window #%d needs redraw\n", which);
 		utLog(message);
 		break;
 
 	case UT_EVENT_WINDOW_RESIZE:
-		sprintf(message, "Resize window #%d: %dx%d\n", which, event->arg0, event->arg1);
+		sprintf_s(message, 1024, "Resize window #%d: %dx%d\n", which, event->arg0, event->arg1);
 		utLog(message);
 		break;
 	}

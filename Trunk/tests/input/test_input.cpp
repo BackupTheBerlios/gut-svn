@@ -32,39 +32,39 @@ void UT_CALLBACK onEvent(utEvent* event)
 	{
 #if !NO_KEYBOARD_MESSAGES
 	case UT_EVENT_KEY:
-		sprintf(buffer, "Keyboard(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
+		sprintf_s(buffer, 512, "Keyboard(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
 		break;
 
 	case UT_EVENT_KEY_REPEAT:
-		sprintf(buffer, "Keyboard(%d):Button(%d) REPEAT\n", event->arg0, event->arg1);
+		sprintf_s(buffer, 512, "Keyboard(%d):Button(%d) REPEAT\n", event->arg0, event->arg1);
 		utLog(buffer);
 		break;
 
 	case UT_EVENT_CHAR:
-		sprintf(buffer, "Char: %c\n", event->arg1);
+		sprintf_s(buffer, 512, "Char: %c\n", event->arg1);
 		utLog(buffer);
 		break;
 #endif
 #if !NO_MOUSE_MESSAGES
 	case UT_EVENT_MOUSE_AXIS:
-		sprintf(buffer, "Mouse(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
+		sprintf_s(buffer, 512, "Mouse(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
 		utLog(buffer);
 		break;
 
 	case UT_EVENT_MOUSE_BUTTON:
-		sprintf(buffer, "Mouse(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
+		sprintf_s(buffer, 512, "Mouse(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
 		break;
 #endif
 #if !NO_CTRL_MESSAGES
 	case UT_EVENT_CTRL_AXIS:
-		sprintf(buffer, "Controller(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
+		sprintf_s(buffer, 512, "Controller(%d):Axis(%d) %d\n", event->arg0, event->arg1, event->arg2);
 		utLog(buffer);
 		break;
 
 	case UT_EVENT_CTRL_BUTTON:
-		sprintf(buffer, "Controller(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
+		sprintf_s(buffer, 512, "Controller(%d):Button(%d) %s\n", event->arg0, event->arg1, event->arg2 ? "DOWN" : "UP");
 		utLog(buffer);
 		break;
 #endif
