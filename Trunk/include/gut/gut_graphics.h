@@ -25,6 +25,11 @@ enum utRenderMatrix
 	UT_MATRIX_MODEL
 };
 
+enum utRenderState
+{
+	UT_RS_LIGHTING
+};
+
 enum utTextureFormat
 {
 	UT_TEXTURE_R8G8B8,
@@ -80,6 +85,7 @@ UT_EXPORT int            utReleaseVertexBuffer(utVertexBuffer buffer);
 UT_EXPORT int            utReleaseVertexFormat(utVertexFormat format);
 UT_EXPORT int            utResizeRenderTarget(utRenderTarget target, int width, int height);
 UT_EXPORT int            utSetRenderMatrix(utRenderMatrix which, const float* matrix);
+UT_EXPORT int            utSetRenderState(utRenderState state, unsigned int value);
 UT_EXPORT int            utSetTexture(int stage, utTexture texture);
 UT_EXPORT int            utSwapRenderTarget(utRenderTarget target);
 UT_EXPORT int            utSwapAllRenderTargets();

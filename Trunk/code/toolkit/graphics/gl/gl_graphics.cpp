@@ -69,6 +69,8 @@ int utBeginFrame()
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 	
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);

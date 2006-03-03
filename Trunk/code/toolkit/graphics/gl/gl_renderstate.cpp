@@ -1,6 +1,6 @@
 /**********************************************************************
- * GameGut - graphics/gl/gl_draw.cpp
- * Copyright (c) 1999-2006 Jason Perkins.
+ * GameGut - graphics/gl/gl_renderstate.cpp
+ * Copyright (c) 1999-2005 Jason Perkins.
  * All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
@@ -13,26 +13,22 @@
  * files LICENSE.txt for more details. 
  **********************************************************************/
 
+#include <stdio.h>
 #include "core/core.h"
 #include "gl_graphics.h"
-#include <stdio.h>
 
 
-int utDrawLines(const float* vertices, int count)
+int utSetRenderState(utRenderState state, unsigned int value)
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 3 * sizeof(float), vertices);
-	glDrawArrays(GL_LINES, 0, count);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	return true;
-}
+	switch (state)
+	{
+	case UT_RS_LIGHTING:
+		value ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
+		return true;
+	}
 
-
-int utDrawPoints(const float* vertices, int count)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 3 * sizeof(float), vertices);
-	glDrawArrays(GL_POINTS, 0, count);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	return true;
+	char msg[128];
+	sprintf_s(msg, 128, "Unknown render state %d\n", state);
+	utLog(msg);
+	return false;
 }

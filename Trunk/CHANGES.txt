@@ -1,18 +1,28 @@
-0.2.6 (Build 6)
+0.2.7 (in progress)
+---------------------------------------------------------
+Added new build option --with-dotnet to create an 
+assembly for the .NET bindings.
+
+Added support for rendering debug visuals.
+
+Added display parameter for windowed render target.
+
+
+0.2.6
 ---------------------------------------------------------
 Added simple graphics API over OpenGL. Handles frame
 buffer setup, vertex and index buffers, textures, and
 render matrices.
 
 
-0.1.5 (Build 5)
+0.1.5
 ---------------------------------------------------------
 Added basic mouse support.
 
 Added game controller support for Windows.
 
 
-0.1.4 (Build 4)
+0.1.4
 ---------------------------------------------------------
 Added basic keyboard support.
  
@@ -22,7 +32,7 @@ on Windows. You no longer need to put the library in a
 system directory or modify LD_LIBRARY_PATH.
 
 
-0.1.3 (Build 3)
+0.1.3
 ---------------------------------------------------------
 Added basic window management and event handling APIs.
 
@@ -30,7 +40,7 @@ Removed C++ memory operators; they weren't able to work
 as intended with the GCC STL. 
 
 
-0.0.2 (Build 2)
+0.0.2
 ---------------------------------------------------------
 Added the GUT_VERSION symbol to the main header.
 
@@ -45,6 +55,6 @@ Added simple memory leak detection for non-MS toolsets.
 Added a C# .NET binding.
 
 
-0.0.1 (Build 1)
+0.0.1
 ---------------------------------------------------------
 Initial public release.

@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gut/gut.h>
+
 #if defined(_WIN32)
 /* To write log messages to VS.NET output window, for debugging */
 #include <windows.h>
@@ -157,6 +158,7 @@ void tick()
 	numFrames++;
 
 	utBeginFrame();
+	utSetRenderState(UT_RS_LIGHTING, true);
 	utClear(0.2f, 0.0f, 0.2f, 1.0f);
 
 	/* Set up a 3D projection */
@@ -178,6 +180,9 @@ void tick()
 	/* Draw some points and lines */
 	utMatrix4Identity(matrix);
 	utSetRenderMatrix(UT_MATRIX_MODEL, matrix);
+	utSetRenderState(UT_RS_LIGHTING, false);
+	utSetTexture(0, NULL);
+
 	utDrawPoints(pointverts, sizeof(pointverts)/sizeof(float)/3);
 	utDrawLines(lineverts, sizeof(lineverts)/sizeof(float)/3);
 
