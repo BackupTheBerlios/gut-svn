@@ -166,6 +166,11 @@ namespace GameGuts
 			UT_MATRIX_MODEL
 		}
 
+		public enum utRenderState
+		{
+			UT_RS_LIGHTING
+		}
+
 		public enum utTextureFormat
 		{
 			UT_TEXTURE_RGB8,
@@ -225,10 +230,10 @@ namespace GameGuts
 		bool utDraw(IntPtr vertices, IntPtr format, IntPtr indices, int start, int count);
 
 		[DllImport("GameGuts")] public static extern
-		bool utDrawLines(float[] vertices, int count);
+		bool utDrawLines(ref float vertices, int count);
 
 		[DllImport("GameGuts")] public static extern
-		bool utDrawPoints(float[] vertices, int count);
+		bool utDrawPoints(ref float vertices, int count);
 
 		[DllImport("GameGuts")]
 		public static extern
@@ -266,6 +271,13 @@ namespace GameGuts
 
 		[DllImport("GameGuts")] public static extern
 		bool utSetRenderMatrix(utRenderMatrix which, ref float matrix);
+
+		[DllImport("GameGuts")] public static extern
+		bool utSetRenderState(utRenderState state, bool value);
+
+		[DllImport("GameGuts")]
+		public static extern
+		bool utSetRenderState(utRenderState state, uint value);
 
 		[DllImport("GameGuts")] public static extern
 		bool utSetTexture(int stage, IntPtr texture);
