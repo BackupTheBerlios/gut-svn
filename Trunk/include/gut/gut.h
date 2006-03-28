@@ -46,6 +46,7 @@ UT_EXPORT int utShutdown();
 
 /* Safe string functions, only on MS C++ 2005 right now */
 #if !defined(_MSC_VER) || (_MSC_VER < 1400)
+#include <stdarg.h>
 int sprintf_s(char* buffer, size_t len, const char* format, ...);
 int vsprintf_s(char* buffer, size_t len, const char* format, va_list args);
 #endif
