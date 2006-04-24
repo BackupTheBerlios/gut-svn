@@ -12,6 +12,9 @@
 
 * Add a window minimized or hidden event
 
+* Implement QueryPerformanceCounter instead of timeGetTime,
+  see archived email
+
 * I don't like utFindWindowByHandle(), or rather I don't like
   the implementation of using a base class for it. Maybe use
   the same approach as the graphics classes? 
